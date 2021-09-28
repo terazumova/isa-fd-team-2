@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="./style.css">
     <title>Камень, ножницы, бумага</title>
   </head>
   <body>
@@ -19,16 +19,17 @@
         </div>
       </div>
     </div>
-    <audio class="audio" controls autoplay="autoplay" loop="loop">
+    <!-- <audio class="audio" controls autoplay="autoplay" loop="loop">
       <source src="./music/awesomeness.mp3" type="audio/mpeg">
     </audio>
     <button onclick="audioPlay()">Play</button>
     <div class="lobby">
       <textarea class="lobby-text_area" name="playerInGame" cols="40" rows="3"></textarea>
-    </div>
+    </div> -->
     <script>
       // затягиваем аудио
       let audioEl = document.querySelector('.audio');
+      const app = document.querySelector(".app");
       //функция воспроизведения
       function audioPlay() {
         audioEl.play();
@@ -57,6 +58,62 @@
         },
         timers: [],
       };
+
+      //Вызов
+      window.application.screens["win"] = renderWinScreen;
+
+      window.application.blocks["win-block"] = renderWinBlock;
+      window.application.blocks["lobby-button"] = renderLobbyButton;
+      window.application.blocks["play-button"] = renderReplayButton;
+      window.application.renderScreen("win");
+
+      function renderWinBlock(container) {
+        const winText = document.createElement("h1");
+        winText.textContent = "Вы победили!";
+        winText.classList.add("win-title");
+        container.appendChild(winText);
+      }
+    
+      function renderLobbyButton(container) {
+        const lobbyButton = document.createElement("button");
+        lobbyButton.textContent = "Перейти в лобби";
+        lobbyButton.classList.add("lobby-button");
+        container.appendChild(lobbyButton);
+      }
+      
+      function renderReplayButton(container) {
+        const replayButton = document.createElement("button");
+        replayButton.textContent = "Играть еще!";
+        replayButton.classList.add("play-button");
+        container.appendChild(replayButton);
+      }
+    
+   
+      function renderWinScreen() {
+        app.textContent = "";
+        const winScreen = document.createElement("div");
+        winScreen.classList.add("win-screen");
+        app.appendChild(winScreen);
+        window.application.renderBlock("win-block", winScreen);
+        window.application.renderBlock("lobby-button", winScreen);
+        window.application.renderBlock("play-button", winScreen);
+        const replayButton = document.querySelector(".play-button");
+        replayButton.textContent = "Играть еще!";
+      }
+      
+      function renderFailScreen() {
+        const app = document.querySelector(".app");
+        app.textContent = "";
+        const failScreen = document.createElement("div");
+        failScreen.classList.add("fail-screen");
+        app.appendChild(failScreen);
+        window.application.renderBlock("fail-block", failScreen);
+        window.application.renderBlock("lobby-button", failScreen);
+        window.application.renderBlock("play-button", failScreen);
+        const replayButton = document.querySelector(".play-button");
+        replayButton.textContent = "Играть еще!";
+      }
+      
     </script>
   </body>
 </html>
