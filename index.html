@@ -8,7 +8,32 @@
   </head>
   <body>
     <div class="app"></div>
+    <div class="info">
+      <a href="#info" title="Правила игры" class="info__icon">i</a>
+      <div id="info" class="info__body">
+        <a href="#" class="info__close">X</a>
+        <div class="info__text">
+          <p>Продержись минуту убегая мышью от квадратов</p>
+          <p>Игра начнется при наведении на серое поле.</p>
+          <p>При выходе за пределы поля, игра начнется с начала.</p>
+        </div>
+      </div>
+    </div>
+    <audio class="audio" controls autoplay="autoplay" loop="loop">
+      <source src="./music/awesomeness.mp3" type="audio/mpeg">
+    </audio>
+    <button onclick="audioPlay()">Play</button>
+    <div class="lobby">
+      <textarea class="lobby-text_area" name="playerInGame" cols="40" rows="3"></textarea>
+    </div>
     <script>
+      // затягиваем аудио
+      let audioEl = document.querySelector('.audio');
+      //функция воспроизведения
+      function audioPlay() {
+        audioEl.play();
+      }
+      
       window.application = {
         blocks: {},
         screens: {},
