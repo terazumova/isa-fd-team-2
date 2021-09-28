@@ -1,15 +1,13 @@
 @font-face {
     font-family: 'Chava-Regular';
-    src: local('./fonts/Chava-Regular'), local('./fonts/Chava-Regular'),
-        url('./fonts/Chava-Regular.woff2') format('woff2');
+    src: url('./fonts/Chava-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'StarseedPro-Regular';
-    src: local('./fonts/StarseedPro-Regular'), local('./fonts/StarseedPro-Regular'),
-        url('./fonts/StarseedPro-Regular.woff2') format('woff2');
+    src: url('./fonts/StarseedPro-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
 }
