@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
     <title>Камень, ножницы, бумага</title>
   </head>
   <body>
@@ -27,6 +28,7 @@
       // затягиваем аудио
       let audioEl = document.querySelector('.audio');
       const app = document.querySelector(".app");
+      
       //функция воспроизведения
       function audioPlay() {
         if(audioEl.muted){
@@ -37,7 +39,6 @@
           audioEl.pause();
         }  
       }
-    <script>
       window.application = {
         blocks: {},
         screens: {},
