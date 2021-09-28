@@ -41,10 +41,8 @@
         renderScreen: function (screenName) {
           if (!this.screens.hasOwnProperty(screenName)) {
             console.log("Такого экрана не существует.");
-
             return;
           }
-
           this.screens[screenName]();
         },
         renderBlock: function (blockName, container) {
@@ -53,42 +51,53 @@
 
             return;
           }
-
           this.blocks[blockName](container);
         },
         timers: [],
       };
 
-      //Вызов
+      // Screens
       window.application.screens["win"] = renderWinScreen;
-
+      window.application.screens["lobby-screen"] = renderLobbyScreen; ////////////////
+      // Elements
       window.application.blocks["win-block"] = renderWinBlock;
+      window.application.blocks["lobby-block"] = renderLobbyBlock; ////////////////
       window.application.blocks["lobby-button"] = renderLobbyButton;
       window.application.blocks["play-button"] = renderReplayButton;
-      window.application.renderScreen("win");
-
+      //Вызов
+      window.application.renderScreen("lobby-screen");
+      // Winner block text
       function renderWinBlock(container) {
         const winText = document.createElement("h1");
         winText.textContent = "Вы победили!";
         winText.classList.add("win-title");
         container.appendChild(winText);
       }
-    
+      // Lobby block text
+      function renderLobbyBlock(container) {
+        const winText = document.createElement("h1");
+        const winBlockText = document.createElement("textarea");
+        winText.textContent = "GAMER: Nick, Wins, Fails";
+        winText.classList.add("win-title");
+        winBlockText.classList.add("lobby-list");
+        container.appendChild(winText);
+        container.appendChild(winBlockText);
+      }
+      // Button lobby
       function renderLobbyButton(container) {
         const lobbyButton = document.createElement("button");
         lobbyButton.textContent = "Перейти в лобби";
         lobbyButton.classList.add("lobby-button");
         container.appendChild(lobbyButton);
       }
-      
+      // Button Replay
       function renderReplayButton(container) {
         const replayButton = document.createElement("button");
         replayButton.textContent = "Играть еще!";
         replayButton.classList.add("play-button");
         container.appendChild(replayButton);
       }
-    
-   
+      // Winer Screen Fn
       function renderWinScreen() {
         app.textContent = "";
         const winScreen = document.createElement("div");
@@ -100,7 +109,19 @@
         const replayButton = document.querySelector(".play-button");
         replayButton.textContent = "Играть еще!";
       }
-      
+      // Lobby Screen Fn ////////////////
+      function renderLobbyScreen() {
+        app.textContent = "";
+        const winScreen = document.createElement("div");
+        winScreen.classList.add("lobby-screen");
+        app.appendChild(winScreen);
+        window.application.renderBlock("lobby-block", winScreen);
+        //window.application.renderBlock("lobby-button", winScreen);
+        window.application.renderBlock("play-button", winScreen);
+        const replayButton = document.querySelector(".play-button");
+        replayButton.textContent = "PLAY!";
+      }     
+      // Fail Screen Fn
       function renderFailScreen() {
         const app = document.querySelector(".app");
         app.textContent = "";
@@ -113,7 +134,7 @@
         const replayButton = document.querySelector(".play-button");
         replayButton.textContent = "Играть еще!";
       }
-      
+
     </script>
   </body>
 </html>
