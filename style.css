@@ -1,7 +1,23 @@
+@font-face {
+    font-family: 'Chava-Regular';
+    src: local('./fonts/Chava-Regular'), local('./fonts/Chava-Regular'),
+        url('./fonts/Chava-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'StarseedPro-Regular';
+    src: local('./fonts/StarseedPro-Regular'), local('./fonts/StarseedPro-Regular'),
+        url('./fonts/StarseedPro-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
 html,body{
 	height: 100%;
 	background-color: #333;
-	font-family: consolas, monospace;
+	font-family: consolas, monospace, Chava-Regular, StarseedPro-Regular;
 	color: #fff;
 	font-size: 16px;
 }
@@ -36,6 +52,14 @@ a{
 	line-height: 23px;
 	position: relative;
 	z-index: 2;
+}
+
+.mute-button{
+	color: #fff;
+	background-color: transparent;
+	border: 1px solid #fff;
+	font-weight: 600;
+	line-height: 23px;
 }
 
 .info__body {
@@ -99,8 +123,8 @@ a{
 }
 
 .lobby-list{
-	width: 400px;
-	height: 500px;
+	width: 300px;
+	height: 300px;
 	margin: 10px 0 10px 0;
 }
 
@@ -112,6 +136,8 @@ a{
 	background-color: #fedd14;
 	border: none;
 	font-size: 20px;
+	font-weight: 400;
+	font-family: Chava-Regular;
 }
 
 .lobby-button:hover,

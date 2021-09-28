@@ -9,6 +9,7 @@
   <body>
     <div class="app"></div>
     <div class="info">
+      <button class="info__icon mute-button" onclick="audioPlay()">></button>
       <a href="#info" title="Правила игры" class="info__icon">i</a>
       <div id="info" class="info__body">
         <a href="#" class="info__close">X</a>
@@ -19,20 +20,22 @@
         </div>
       </div>
     </div>
-    <!-- <audio class="audio" controls autoplay="autoplay" loop="loop">
+    <audio class="audio" controls autoplay="autoplay" loop="loop" preload="auto" muted="true">
       <source src="./music/awesomeness.mp3" type="audio/mpeg">
     </audio>
-    <button onclick="audioPlay()">Play</button>
-    <div class="lobby">
-      <textarea class="lobby-text_area" name="playerInGame" cols="40" rows="3"></textarea>
-    </div> -->
     <script>
       // затягиваем аудио
       let audioEl = document.querySelector('.audio');
       const app = document.querySelector(".app");
       //функция воспроизведения
       function audioPlay() {
-        audioEl.play();
+        if(audioEl.muted){
+          audioEl.muted = false;
+          audioEl.play();
+        } else {
+          audioEl.muted = true;
+          audioEl.pause();
+        }  
       }
       
       window.application = {
@@ -48,7 +51,6 @@
         renderBlock: function (blockName, container) {
           if (!this.blocks.hasOwnProperty(blockName)) {
             console.log("Такого блока не существует.");
-
             return;
           }
           this.blocks[blockName](container);
@@ -119,7 +121,7 @@
         //window.application.renderBlock("lobby-button", winScreen);
         window.application.renderBlock("play-button", winScreen);
         const replayButton = document.querySelector(".play-button");
-        replayButton.textContent = "PLAY!";
+        replayButton.textContent = "ИГРАТЬ";
       }     
       // Fail Screen Fn
       function renderFailScreen() {
