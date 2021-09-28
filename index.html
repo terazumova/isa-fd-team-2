@@ -1,12 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
     <title>Камень, ножницы, бумага</title>
   </head>
   <body>
     <div class="app"></div>
+    <div class="info">
+      <button class="info__icon mute-button" onclick="audioPlay()">></button>
+      <a href="#info" title="Правила игры" class="info__icon">i</a>
+      <div id="info" class="info__body">
+        <a href="#" class="info__close">X</a>
+        <div class="info__text">
+          <p>Продержись минуту убегая мышью от квадратов</p>
+          <p>Игра начнется при наведении на серое поле.</p>
+          <p>При выходе за пределы поля, игра начнется с начала.</p>
+        </div>
+      </div>
+    </div>
+    <audio class="audio" controls autoplay="autoplay" loop="loop" preload="auto" muted="true">
+      <source src="./music/awesomeness.mp3" type="audio/mpeg">
+    </audio>
+    <script>
+      // затягиваем аудио
+      let audioEl = document.querySelector('.audio');
+      const app = document.querySelector(".app");
+      //функция воспроизведения
+      function audioPlay() {
+        if(audioEl.muted){
+          audioEl.muted = false;
+          audioEl.play();
+        } else {
+          audioEl.muted = true;
+          audioEl.pause();
+        }  
+      }
     <script>
       window.application = {
         blocks: {},
@@ -14,23 +44,98 @@
         renderScreen: function (screenName) {
           if (!this.screens.hasOwnProperty(screenName)) {
             console.log("Такого экрана не существует.");
-
             return;
           }
-
           this.screens[screenName]();
         },
         renderBlock: function (blockName, container) {
           if (!this.blocks.hasOwnProperty(blockName)) {
             console.log("Такого блока не существует.");
-
             return;
           }
-
           this.blocks[blockName](container);
         },
         timers: [],
       };
+
+      // Screens
+      window.application.screens["win"] = renderWinScreen;
+      window.application.screens["lobby-screen"] = renderLobbyScreen; ////////////////
+      // Elements
+      window.application.blocks["win-block"] = renderWinBlock;
+      window.application.blocks["lobby-block"] = renderLobbyBlock; ////////////////
+      window.application.blocks["lobby-button"] = renderLobbyButton;
+      window.application.blocks["play-button"] = renderReplayButton;
+      //Вызов
+      window.application.renderScreen("lobby-screen");
+      // Winner block text
+      function renderWinBlock(container) {
+        const winText = document.createElement("h1");
+        winText.textContent = "Вы победили!";
+        winText.classList.add("win-title");
+        container.appendChild(winText);
+      }
+      // Lobby block text
+      function renderLobbyBlock(container) {
+        const winText = document.createElement("h1");
+        const winBlockText = document.createElement("textarea");
+        winText.textContent = "GAMER: Nick, Wins, Fails";
+        winText.classList.add("win-title");
+        winBlockText.classList.add("lobby-list");
+        container.appendChild(winText);
+        container.appendChild(winBlockText);
+      }
+      // Button lobby
+      function renderLobbyButton(container) {
+        const lobbyButton = document.createElement("button");
+        lobbyButton.textContent = "Перейти в лобби";
+        lobbyButton.classList.add("lobby-button");
+        container.appendChild(lobbyButton);
+      }
+      // Button Replay
+      function renderReplayButton(container) {
+        const replayButton = document.createElement("button");
+        replayButton.textContent = "Играть еще!";
+        replayButton.classList.add("play-button");
+        container.appendChild(replayButton);
+      }
+      // Winer Screen Fn
+      function renderWinScreen() {
+        app.textContent = "";
+        const winScreen = document.createElement("div");
+        winScreen.classList.add("win-screen");
+        app.appendChild(winScreen);
+        window.application.renderBlock("win-block", winScreen);
+        window.application.renderBlock("lobby-button", winScreen);
+        window.application.renderBlock("play-button", winScreen);
+        const replayButton = document.querySelector(".play-button");
+        replayButton.textContent = "Играть еще!";
+      }
+      // Lobby Screen Fn ////////////////
+      function renderLobbyScreen() {
+        app.textContent = "";
+        const winScreen = document.createElement("div");
+        winScreen.classList.add("lobby-screen");
+        app.appendChild(winScreen);
+        window.application.renderBlock("lobby-block", winScreen);
+        //window.application.renderBlock("lobby-button", winScreen);
+        window.application.renderBlock("play-button", winScreen);
+        const replayButton = document.querySelector(".play-button");
+        replayButton.textContent = "ИГРАТЬ";
+      }     
+      // Fail Screen Fn
+      function renderFailScreen() {
+        const app = document.querySelector(".app");
+        app.textContent = "";
+        const failScreen = document.createElement("div");
+        failScreen.classList.add("fail-screen");
+        app.appendChild(failScreen);
+        window.application.renderBlock("fail-block", failScreen);
+        window.application.renderBlock("lobby-button", failScreen);
+        window.application.renderBlock("play-button", failScreen);
+        const replayButton = document.querySelector(".play-button");
+        replayButton.textContent = "Играть еще!";
+      }
 
       function request(path, parameters, callback) {
         path += formatParameters(parameters);
