@@ -43,6 +43,10 @@
           this.blocks[blockName](container);
         },
         timers: [],
+        player: {
+          token: "",
+          gameId: "",
+        },
       };
 
       function request(path, parameters, callback) {
