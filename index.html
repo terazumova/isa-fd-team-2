@@ -1,12 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
     <title>Камень, ножницы, бумага</title>
   </head>
   <body>
     <div class="app"></div>
+    <div class="info">
+      <button class="info__icon mute-button" onclick="audioPlay()">></button>
+      <a href="#info" title="Правила игры" class="info__icon">i</a>
+      <div id="info" class="info__body">
+        <a href="#" class="info__close">X</a>
+        <div class="info__text">
+          <p>Продержись минуту убегая мышью от квадратов</p>
+          <p>Игра начнется при наведении на серое поле.</p>
+          <p>При выходе за пределы поля, игра начнется с начала.</p>
+        </div>
+      </div>
+    </div>
+    <audio class="audio" controls autoplay="autoplay" loop="loop" preload="auto" muted="true">
+      <source src="./music/awesomeness.mp3" type="audio/mpeg" />
+    </audio>
     <script>
       window.application = {
         blocks: {},
@@ -14,23 +31,49 @@
         renderScreen: function (screenName) {
           if (!this.screens.hasOwnProperty(screenName)) {
             console.log("Такого экрана не существует.");
-
             return;
           }
-
           this.screens[screenName]();
         },
         renderBlock: function (blockName, container) {
           if (!this.blocks.hasOwnProperty(blockName)) {
             console.log("Такого блока не существует.");
-
             return;
           }
-
           this.blocks[blockName](container);
         },
         timers: [],
       };
+
+      function request(path, parameters, callback) {
+        path += formatParameters(parameters);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", path);
+
+        xhr.addEventListener("readystatechange", event => {
+          if (event.target.readyState !== 4) {
+            return;
+          }
+
+          const responseObject = event.target.response;
+          callback(responseObject);
+        });
+
+        xhr.send();
+      }
+
+      function formatParameters(parameters) {
+        return (
+          "?" +
+          Object.keys(parameters)
+            .map(function (key) {
+              return `${key}=${encodeURIComponent(parameters[key])}`;
+            })
+            .join("&")
+        );
+      }
     </script>
+    <script src="app.js"></script>
   </body>
 </html>
