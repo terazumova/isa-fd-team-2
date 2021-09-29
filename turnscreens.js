@@ -13,11 +13,11 @@ window.application.blocks['papper-button'] = renderPapperButton
 window.application.renderScreen('turn')
 
 function turnCheck(){
-  request("/game-status", {token: window.application.player.token}, {id: window.application.player.token}, function(data){
+  request("/game-status", {token: window.application.player.token, id: window.application.player.gameId}, function(data){
     if (data.status === "error"){
       console.log(data.messague)
     } else{
-      let gameStatus = data[game-status]
+      let gameStatus = data['game-status']
       if(gameStatus.status === "win") {
           window.application.renderScreen('win-screen')
         }else if(gameStatus.status === "lose"){
@@ -40,7 +40,7 @@ function renderTurnBlock(container){
 function renderDoubleTurnBlock(container){
   const doubleTurnUpText = document.createElement('h1')
   const doubleTurnBottomText = document.createElement('h2')
-  doubleTurnUpText.textContent = 'Да вы мылите одинаково!'
+  doubleTurnUpText.textContent = 'Да вы мыслите одинаково!'
   doubleTurnBottomText.textContent = 'Давай еще разок'
   doubleTurnUpText.classList.add('turn-block')
   doubleTurnBottomText.classList.add('turn-block')
@@ -56,9 +56,9 @@ function renderStoneButton(container){
   container.appendChild(stoneButton)
 
   stoneButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token}, {id: window.application.player.token}, "move=rock", function (data) {
+        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "rock"}, function (data) {
       if (data.status !== "error"){
-        let gameStatus = data[game-status]
+        let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
           window.application.renderScreen('waiting-enemy-screen')
         }else if(gameStatus.status === "win") {
@@ -83,9 +83,9 @@ function renderScissorsButton(container){
   container.appendChild(scissorsButton)
 
   scissorsButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token}, {id: window.application.player.token}, "move=scissors", function (data) {
+        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "scissors"}, function (data) {
       if (data.status !== "error"){
-        let gameStatus = data[game-status]
+        let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
           window.application.renderScreen('waiting-enemy-screen')
         }else if(gameStatus.status === "win") {
@@ -109,9 +109,9 @@ function renderPapperButton(container){
   container.appendChild(papperButton)
 
   papperButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token}, {id: window.application.player.token}, "move=paper", function (data) {
+        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: 'paper'}, function (data) {
       if (data.status !== "error"){
-        let gameStatus = data[game-status]
+        let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
           window.application.renderScreen('waiting-enemy-screen')
         }else if(gameStatus.status === "win") {
