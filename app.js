@@ -1,5 +1,3 @@
-
-=======
 // затягиваем аудио
 let audioEl = document.querySelector(".audio");
 const app = document.querySelector(".app");
@@ -35,7 +33,7 @@ window.application.blocks["lobby-button"] = renderLobbyButton;
 window.application.blocks["play-button"] = renderPlayButton;
 
 //Вызов
-window.application.renderScreen('startGame-screen');
+window.application.renderScreen('lobby-screen');
   
  /* ********* БЛОК ЭКРАНА СТАРТА ********* */
 function renderStartGameBlock(container) {
@@ -145,7 +143,7 @@ function renderLoginScreen() {
 
     window.application.renderBlock('login-block', authBlock);
     window.application.renderBlock('login-button', authBlock);
-  
+}  
 
 // Lobby block text
 function renderLobbyBlock(container) {
