@@ -56,7 +56,7 @@ function renderStartGameButton(container) {
 
     startGameButton.addEventListener('click', event => {
         request('/ping', '', function (data) { //прописать бекэнд
-            if (data.status === 'ok') {
+            if (data.status !== 'ok') {
                 window.application.renderScreen('login-screen');
             }
             else {
@@ -165,22 +165,9 @@ function renderLobbyScreen() {
   window.application.renderBlock("lobby-block", winScreen);
   //window.application.renderBlock("lobby-button", winScreen);
   window.application.renderBlock("play-button", winScreen);
+
   const replayButton = document.querySelector(".play-button");
   replayButton.textContent = "ИГРАТЬ";
-}
-
-// Fail Screen Fn
-function renderFailScreen() {
-  const app = document.querySelector(".app");
-  app.textContent = "";
-  const failScreen = document.createElement("div");
-  failScreen.classList.add("fail-screen");
-  app.appendChild(failScreen);
-  window.application.renderBlock("fail-block", failScreen);
-  window.application.renderBlock("lobby-button", failScreen);
-  window.application.renderBlock("play-button", failScreen);
-  const replayButton = document.querySelector(".play-button");
-  replayButton.textContent = "Играть еще!";
 }
 
 function renderWinBlock(container) {
@@ -205,7 +192,7 @@ function renderLobbyButton(container) {
   const lobbyButton = document.createElement("button");
   lobbyButton.textContent = "Перейти в лобби";
 
-  lobbyButton.classList.add("button lobby-button");
+  lobbyButton.classList.add("lobby-button");
 
   lobbyButton.addEventListener("click", event => {
     window.application.renderScreen("lobby-screen");
@@ -218,7 +205,7 @@ function renderPlayButton(container) {
   const playButton = document.createElement("button");
   playButton.textContent = "Играть!";
 
-  playButton.classList.add("button play-button");
+  playButton.classList.add("play-button");
 
   playButton.addEventListener("click", event => {
     // request("/start", { token: window.application.token }, function (data) {

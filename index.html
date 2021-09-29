@@ -43,6 +43,10 @@
           this.blocks[blockName](container);
         },
         timers: [],
+        player: {
+          token: "",
+          gameId: "",
+        },
       };
 
       function request(path, parameters, callback) {
@@ -74,6 +78,6 @@
         );
       }
     </script>
-    <script src="app.js"></script>
+    <script src="./app.js"></script>
   </body>
 </html>
