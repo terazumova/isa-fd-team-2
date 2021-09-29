@@ -150,6 +150,18 @@ a {
   font-family: "StarseedPro-Regular";
 }
 
+.lobby-button,
+.play-button {
+  min-width: 200px;
+  height: 70px;
+  margin-top: 10px;
+  background-color: #fedd14;
+  border: none;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: Chava-Regular;
+}
+
 .lobby-button {
   font-size: 18px;
 }
