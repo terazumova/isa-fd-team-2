@@ -278,7 +278,7 @@ window.application.blocks['papper-button'] = renderPapperButton
 window.application.renderScreen('turn')
 
 function turnCheck(){
-  request("/game-status", {token: window.application.player.token}, {id: window.application.player.gameId}, function(data){
+  request("/game-status", {token: window.application.player.token, id: window.application.player.gameId}, function(data){
     if (data.status === "error"){
       console.log(data.messague)
     } else{
@@ -321,7 +321,7 @@ function renderStoneButton(container){
   container.appendChild(stoneButton)
 
   stoneButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token}, {id: window.application.player.gameId, move: "rock"}, function (data) {
+        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "rock"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
@@ -348,7 +348,7 @@ function renderScissorsButton(container){
   container.appendChild(scissorsButton)
 
   scissorsButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token}, {id: window.application.player.gameId, move: "scissors"}, function (data) {
+        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "scissors"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
@@ -374,7 +374,7 @@ function renderPapperButton(container){
   container.appendChild(papperButton)
 
   papperButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token}, {id: window.application.player.gameId, move: "paper"}, function (data) {
+        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "paper"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
