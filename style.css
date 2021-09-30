@@ -1,6 +1,6 @@
 @font-face {
   font-family: Chava;
-  src: url(./fonts/Chava-Regular.woff2) format("woff2");
+  src: url(./fonts/Chava-Regular.woff2) format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: fallback;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: StarseedPro;
-  src: url(./fonts/StarseedPro-Regular.woff2) format("woff2");
+  src: url(./fonts/StarseedPro-Regular.woff2) format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: fallback;
@@ -98,7 +98,7 @@ a{
   border: none;
   font-size: 20px;
   font-weight: 400;
-  font-family: Chava-Regular;
+  font-family: Chava;
 }
 
 .result-image {
@@ -121,7 +121,7 @@ a{
 .login-title {
   display: flex;
   align-items: center;
-  font-family: "StarseedPro-Regular";
+  font-family: StarseedPro;
   color: #000;
   font-size: 24px;
 }
@@ -132,7 +132,7 @@ a{
   align-items: center;
   padding: 20px;
   text-align: justify;
-  font-family: "Chava-Regular";
+  font-family: Chava;
   color: #000;
   font-size: 16px;
 }
@@ -145,10 +145,11 @@ a{
   margin-top: 20px;
   margin-bottom: 20px;
   border: 2px solid #000;
-  font-family: "Chava-Regular";
+  font-family: Chava;
   color: #000;
   font-size: 16px;
 }
+
 .loader {
   animation: spin 1s linear infinite;
   height: 10px;
@@ -211,6 +212,22 @@ a{
   display: none;
 }
 
+.result-title {
+  padding: 20px 0px;
+  color: #000000;
+}
+
+.loser-text {
+  font-family: StarseedPro;
+  font-size: 30px;
+  color: #fedd14;
+}
+
+.result-image {
+  width: 100px;
+  height: 100px;
+}
+  
 .info__text {
 	padding: 0px 10px 0px 0px;
 }

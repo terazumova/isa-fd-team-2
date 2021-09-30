@@ -51,8 +51,9 @@ function renderStartGameBlock(container) {
 
 function renderStartGameButton(container) {
   const startGameButton = document.createElement('button');
-  startGameButton.textContent = 'Я понял правила, давай уже играть!';
+  startGameButton.textContent = 'Начать игру!';
   startGameButton.classList.add('startGame-button');
+  startGameButton.classList.add('button');
 
   startGameButton.addEventListener('click', event => {
     request('/ping', '', function (data) {
@@ -68,11 +69,11 @@ function renderStartGameButton(container) {
 }
 
 function renderStartGameScreen() {
-  const app = document.querySelector('.app');
   app.textContent = '';
 
   const startGameScreen = document.createElement('div');
   startGameScreen.classList.add('startGame-screen');
+  startGameScreen.classList.add('screen');
 
   app.appendChild(startGameScreen);
 
@@ -98,6 +99,7 @@ function renderLoginButton(container) {
   const loginButton = document.createElement('button');
   loginButton.textContent = 'Зарегистрировать/проверить игрока';
   loginButton.classList.add('play-button');
+  loginButton.classList.add('button');
 
   loginButton.addEventListener('click', event => {
     if (loginInput.value !== '') {
@@ -128,11 +130,11 @@ function renderLoginButton(container) {
 }
 
 function renderLoginScreen() {
-  const app = document.querySelector('.app');
   app.textContent = '';
 
   const loginScreen = document.createElement('div');
   loginScreen.classList.add('login-screen');
+  loginScreen.classList.add('screen');
   app.appendChild(loginScreen);
 
   const authBlock = document.createElement('div');
@@ -145,32 +147,35 @@ function renderLoginScreen() {
 
 // Lobby block text
 function renderLobbyBlock(container) {
-  const winText = document.createElement('h1');
-  const winBlockText = document.createElement('textarea');
-  winText.textContent = 'GAMER: Nick, Wins, Fails';
-  winText.classList.add('win-title');
-  winBlockText.classList.add('lobby-list');
-  container.appendChild(winText);
-  container.appendChild(winBlockText);
+  const lobbyText = document.createElement('h1');
+  const lobbyBlockText = document.createElement('textarea');
+
+  lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
+
+  lobbyText.classList.add('win-title');
+  lobbyBlockText.classList.add('lobby-list');
+
+  container.appendChild(lobbyText);
+  container.appendChild(lobbyBlockText);
 }
 
 // Lobby Screen Fn ////////////////
 function renderLobbyScreen() {
   app.textContent = '';
-  const winScreen = document.createElement('div');
-  winScreen.classList.add('lobby-screen');
-  app.appendChild(winScreen);
-  window.application.renderBlock('lobby-block', winScreen);
-  //window.application.renderBlock("lobby-button", winScreen);
-  window.application.renderBlock('play-button', winScreen);
+  const lobbyScreen = document.createElement('div');
+  lobbyScreen.classList.add('lobby-screen');
+
+  app.appendChild(lobbyScreen);
+  window.application.renderBlock('lobby-block', lobbyScreen);
+  window.application.renderBlock('play-button', lobbyScreen);
 
   const replayButton = document.querySelector('.play-button');
-  replayButton.textContent = 'ИГРАТЬ';
+  replayButton.textContent = 'Играть';
 }
 
 function renderWinBlock(container) {
   const winText = document.createElement('h1');
-  winText.textContent = 'Вы победили!';
+  winText.textContent = 'Ты победил!';
 
   winText.classList.add('result-title');
 
@@ -178,11 +183,16 @@ function renderWinBlock(container) {
 }
 
 function renderFailBlock(container) {
+  const loserText = document.createElement('h1');
+  loserText.textContent = 'LOSER';
+  loserText.classList.add('loser-text');
+
   const failText = document.createElement('h1');
-  failText.textContent = 'Вы проиграли!';
+  failText.textContent = 'Ты проиграл!';
 
   failText.classList.add('result-title');
 
+  container.appendChild(loserText);
   container.appendChild(failText);
 }
 
@@ -191,6 +201,7 @@ function renderLobbyButton(container) {
   lobbyButton.textContent = 'Перейти в лобби';
 
   lobbyButton.classList.add('lobby-button');
+  lobbyButton.classList.add('button');
 
   lobbyButton.addEventListener('click', event => {
     window.application.renderScreen('lobby-screen');
@@ -203,6 +214,8 @@ function renderPlayButton(container) {
   const playButton = document.createElement('button');
   playButton.textContent = 'Играть!';
 
+  playButton.classList.add('play-button');
+  playButton.classList.add('button');
   playButton.classList.add('play-button');
 
   playButton.addEventListener('click', event => {
@@ -228,15 +241,15 @@ function renderResultImage(container, imagePath) {
 }
 
 function renderWinScreen() {
-  const app = document.querySelector('.app');
   app.textContent = '';
 
   const winScreen = document.createElement('div');
   winScreen.classList.add('win-screen');
+  winScreen.classList.add('screen');
 
   app.appendChild(winScreen);
 
-  renderResultImage(winScreen, 'img/happy.png');
+  renderResultImage(winScreen, 'img/laurel.png');
 
   window.application.renderBlock('win-block', winScreen);
   window.application.renderBlock('lobby-button', winScreen);
@@ -247,11 +260,11 @@ function renderWinScreen() {
 }
 
 function renderFailScreen() {
-  const app = document.querySelector('.app');
   app.textContent = '';
 
   const failScreen = document.createElement('div');
   failScreen.classList.add('fail-screen');
+  failScreen.classList.add('screen');
 
   app.appendChild(failScreen);
 
@@ -265,206 +278,213 @@ function renderFailScreen() {
   replayButton.textContent = 'Играть еще!';
 }
 
-window.application.screens['turn'] = renderTurnScreen
-window.application.screens['double-turn'] = renderDoubleTurnScreen
-window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen
+window.application.screens['turn'] = renderTurnScreen;
+window.application.screens['double-turn'] = renderDoubleTurnScreen;
+window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen;
 
-window.application.blocks['turn-block'] = renderTurnBlock
-window.application.blocks['double-turn-block'] = renderDoubleTurnBlock
-window.application.blocks['stone-button'] = renderStoneButton
-window.application.blocks['scissors-button'] = renderScissorsButton
-window.application.blocks['papper-button'] = renderPapperButton
+window.application.blocks['turn-block'] = renderTurnBlock;
+window.application.blocks['double-turn-block'] = renderDoubleTurnBlock;
+window.application.blocks['stone-button'] = renderStoneButton;
+window.application.blocks['scissors-button'] = renderScissorsButton;
+window.application.blocks['papper-button'] = renderPapperButton;
 
-function turnCheck(){
-  request('http://localhost:3000/game-status', {token: window.application.player.token, id: window.application.player.gameId}, function(data){
-    if (data.status === "error"){
-      console.log(data.status + data.messague)
-    } else{
-      let gameStatus = data['game-status']
-      if(gameStatus.status === "win") {
-          window.application.renderScreen('win-screen')
-        }else if(gameStatus.status === "lose"){
-          window.application.renderScreen('fail-screen')
-        }else if(gameStatus.status === "waiting-for-your-move"){
-          window.application.renderScreen('double-turn')}
+function turnCheck() {
+  request('http://localhost:3000/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+    if (data.status === 'error') {
+      console.log(data.status + data.messague);
+    } else {
+      let gameStatus = data['game-status'];
+      if (gameStatus.status === 'win') {
+        window.application.renderScreen('win-screen');
+      } else if (gameStatus.status === 'lose') {
+        window.application.renderScreen('fail-screen');
+      } else if (gameStatus.status === 'waiting-for-your-move') {
+        window.application.renderScreen('double-turn');
+      }
     }
-  })
+  });
 }
 
-function renderTurnBlock(container){
-  const turnText = document.createElement('h1')
-  turnText.textContent = 'Твой Ход'
-  turnText.classList.add('turn-block')
-  container.appendChild(turnText)
+function renderTurnBlock(container) {
+  const turnText = document.createElement('h1');
+  turnText.textContent = 'Твой Ход';
+  turnText.classList.add('turn-block');
+  container.appendChild(turnText);
 }
 
-function renderDoubleTurnBlock(container){
-  const doubleTurnUpText = document.createElement('h1')
-  const doubleTurnBottomText = document.createElement('h2')
-  doubleTurnUpText.textContent = 'Да вы мылите одинаково!'
-  doubleTurnBottomText.textContent = 'Давай еще разок'
-  doubleTurnUpText.classList.add('turn-block')
-  doubleTurnBottomText.classList.add('turn-block')
-  container.appendChild(doubleTurnUpText)
-  container.appendChild(doubleTurnBottomText)
+function renderDoubleTurnBlock(container) {
+  const doubleTurnUpText = document.createElement('h1');
+  const doubleTurnBottomText = document.createElement('h2');
+  doubleTurnUpText.textContent = 'Да вы мылите одинаково!';
+  doubleTurnBottomText.textContent = 'Давай еще разок';
+  doubleTurnUpText.classList.add('turn-block');
+  doubleTurnBottomText.classList.add('turn-block');
+  container.appendChild(doubleTurnUpText);
+  container.appendChild(doubleTurnBottomText);
 }
 
+function renderStoneButton(container) {
+  const stoneButton = document.createElement('button');
+  stoneButton.textContent = 'Камень';
+  stoneButton.classList.add('stone-button');
+  stoneButton.classList.add('button');
+  container.appendChild(stoneButton);
 
-function renderStoneButton(container){
-  const stoneButton = document.createElement('button')
-  stoneButton.textContent = 'Камень'
-  stoneButton.classList.add('stone-button')
-  stoneButton.classList.add('button')
-  container.appendChild(stoneButton)
-
-  stoneButton.addEventListener('click', e =>{
-        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "rock"}, function (data) {
-      if (data.status !== "error"){
-        let gameStatus = data['game-status']
-        if (gameStatus.status === "waiting-for-enemy-move") {
-          window.application.renderScreen('waiting-enemy-screen')
-        }else if(gameStatus.status === "win") {
-          window.application.renderScreen('win-screen')
-        }else if(gameStatus.status === "lose"){
-          window.application.renderScreen('fail-screen')
-        }else if(gameStatus.status === "waiting-for-your-move"){
-          window.application.renderScreen('double-turn')
-        }
-      } else{
-        console.log(data.status + data.messague)
-      }
-    })   
-  })
-
-}
-
-function renderScissorsButton(container){
-  const scissorsButton = document.createElement('button')
-  scissorsButton.textContent = 'Ножницы'
-  scissorsButton.classList.add('scissors-button')
-  scissorsButton.classList.add('button')
-  container.appendChild(scissorsButton)
-
-  scissorsButton.addEventListener('click', e =>{
-        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "scissors"}, function (data) {
-      if (data.status !== "error"){
-        let gameStatus = data['game-status']
-        if (gameStatus.status === "waiting-for-enemy-move") {
-          window.application.renderScreen('waiting-enemy-screen')
-        }else if(gameStatus.status === "win") {
-          window.application.renderScreen('win-screen')
-        }else if(gameStatus.status === "lose"){
-          window.application.renderScreen('fail-screen')
-        }else if(gameStatus.status === "waiting-for-your-move"){
-          window.application.renderScreen('double-turn')
+  stoneButton.addEventListener('click', e => {
+    request(
+      'http://localhost:3000/play',
+      { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' },
+      function (data) {
+        if (data.status !== 'error') {
+          let gameStatus = data['game-status'];
+          if (gameStatus.status === 'waiting-for-enemy-move') {
+            window.application.renderScreen('waiting-enemy-screen');
+          } else if (gameStatus.status === 'win') {
+            window.application.renderScreen('win-screen');
+          } else if (gameStatus.status === 'lose') {
+            window.application.renderScreen('fail-screen');
+          } else if (gameStatus.status === 'waiting-for-your-move') {
+            window.application.renderScreen('double-turn');
           }
-        } else{
-        console.log(data.status + data.messague)}
-      }
-    )   
-  })
-  
-}
-function renderPapperButton(container){
-  const papperButton = document.createElement('button')
-  papperButton.textContent = 'Бумага'
-  papperButton.classList.add('papper-button')
-  papperButton.classList.add('button')
-  container.appendChild(papperButton)
-
-  papperButton.addEventListener('click', e =>{
-        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "paper"}, function (data) {
-      if (data.status !== "error"){
-        let gameStatus = data['game-status']
-        if (gameStatus.status === "waiting-for-enemy-move") {
-          window.application.renderScreen('waiting-enemy-screen')
-        }else if(gameStatus.status === "win") {
-          window.application.renderScreen('win-screen')
-        }else if(gameStatus.status === "lose"){
-          window.application.renderScreen('fail-screen')
-        }else if(gameStatus.status === "waiting-for-your-move"){
-          window.application.renderScreen('double-turn')
-          }
-        }else{
-        console.log(data.status + data.messague)}
-      }
-    )   
-  })
-  
-}
-
-function renderTurnScreen(){
-  app.textContent = ''
-  const turnScreen = document.createElement('div')
-  turnScreen.classList.add('turn-screen')
-  turnScreen.classList.add('screen')
-  app.appendChild(turnScreen)
-
-  window.application.renderBlock('turn-block', turnScreen)
-  window.application.renderBlock('stone-button', turnScreen)
-  window.application.renderBlock('scissors-button', turnScreen)
-  window.application.renderBlock('papper-button', turnScreen)
-}
-
-function renderDoubleTurnScreen(){
-  app.textContent = ''
-  const doubleTurnScreen = document.createElement('div')
-  doubleTurnScreen.classList.add('turn-screen')
-  doubleTurnScreen.classList.add('screen')
-  app.appendChild(turnScreen)
-
-  window.application.renderBlock('double-turn-block', doubleTurnScreen)
-  window.application.renderBlock('stone-button', doubleTurnScreen)
-  window.application.renderBlock('scissors-button', doubleTurnScreen)
-  window.application.renderBlock('papper-button', doubleTurnScreen)
-}
-
-function renderWaitingTurnScreen(){   
-  app.textContent = ''
-  const waitingTurnScreen = document.createElement('div')
-  waitingTurnScreen.classList.add('waiting-enemy-block')
-  waitingTurnScreen.classList.add('loader')
-  waitingTurnScreen.classList.add('screen')
-  app.appendChild(waitingTurnScreen)
-
-  window.application.timers.push(setInterval(turnCheck, 500))
-}
-
-
-window.application.screens['waiting-game-screen'] = renderWaitingGameScreen
-
-window.application.blocks['waiting-game-block'] = renderWaitingGameBlock
-
-function waitingForStart(){
-  request('http://localhost:3000/game-status', {token: window.application.player.token, id: window.application.player.gameId}, function(data){
-    if (data.status === "error"){
-      console.log(data.status + data.messague)
-    } else{
-      let gameStatus = data['game-status']
-      if(gameStatus.status !== "waiting-for-start") {
-          window.application.renderScreen('turn')
+        } else {
+          console.log(data.status + data.messague);
         }
-  }
-})
+      }
+    );
+  });
 }
 
-function renderWaitingGameBlock(container){
-  const waitingGameText = document.createElement('h1')
-  waitingGameText.textContent = 'Идет поиск противника..'
-  waitingGameText.classList.add('waiting-game-block')
-  container.appendChild(waitingGameScreen)
+function renderScissorsButton(container) {
+  const scissorsButton = document.createElement('button');
+  scissorsButton.textContent = 'Ножницы';
+  scissorsButton.classList.add('scissors-button');
+  scissorsButton.classList.add('button');
+  container.appendChild(scissorsButton);
 
-} 
+  scissorsButton.addEventListener('click', e => {
+    request(
+      'http://localhost:3000/play',
+      { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' },
+      function (data) {
+        if (data.status !== 'error') {
+          let gameStatus = data['game-status'];
+          if (gameStatus.status === 'waiting-for-enemy-move') {
+            window.application.renderScreen('waiting-enemy-screen');
+          } else if (gameStatus.status === 'win') {
+            window.application.renderScreen('win-screen');
+          } else if (gameStatus.status === 'lose') {
+            window.application.renderScreen('fail-screen');
+          } else if (gameStatus.status === 'waiting-for-your-move') {
+            window.application.renderScreen('double-turn');
+          }
+        } else {
+          console.log(data.status + data.messague);
+        }
+      }
+    );
+  });
+}
+function renderPapperButton(container) {
+  const papperButton = document.createElement('button');
+  papperButton.textContent = 'Бумага';
+  papperButton.classList.add('papper-button');
+  papperButton.classList.add('button');
+  container.appendChild(papperButton);
 
-function renderWaitingGameScreen(){   
-  app.textContent = ''
+  papperButton.addEventListener('click', e => {
+    request(
+      'http://localhost:3000/play',
+      { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' },
+      function (data) {
+        if (data.status !== 'error') {
+          let gameStatus = data['game-status'];
+          if (gameStatus.status === 'waiting-for-enemy-move') {
+            window.application.renderScreen('waiting-enemy-screen');
+          } else if (gameStatus.status === 'win') {
+            window.application.renderScreen('win-screen');
+          } else if (gameStatus.status === 'lose') {
+            window.application.renderScreen('fail-screen');
+          } else if (gameStatus.status === 'waiting-for-your-move') {
+            window.application.renderScreen('double-turn');
+          }
+        } else {
+          console.log(data.status + data.messague);
+        }
+      }
+    );
+  });
+}
 
-  const waitingGameScreen = document.createElement('div')
-  waitingGameScreen.classList.add('waiting-game-screen')
-  waitingGameScreen.classList.add('loader')
-  waitingGameScreen.classList.add('screen')
-  app.appendChild(waitingGameScreen)
+function renderTurnScreen() {
+  app.textContent = '';
+  const turnScreen = document.createElement('div');
+  turnScreen.classList.add('turn-screen');
+  turnScreen.classList.add('screen');
+  app.appendChild(turnScreen);
 
-  window.application.renderBlock('waiting-game-block', waitingGameScreen)
-  window.application.timers.push(setInterval(waitingForStart, 500))
+  window.application.renderBlock('turn-block', turnScreen);
+  window.application.renderBlock('stone-button', turnScreen);
+  window.application.renderBlock('scissors-button', turnScreen);
+  window.application.renderBlock('papper-button', turnScreen);
+}
+
+function renderDoubleTurnScreen() {
+  app.textContent = '';
+  const doubleTurnScreen = document.createElement('div');
+  doubleTurnScreen.classList.add('turn-screen');
+  doubleTurnScreen.classList.add('screen');
+  app.appendChild(turnScreen);
+
+  window.application.renderBlock('double-turn-block', doubleTurnScreen);
+  window.application.renderBlock('stone-button', doubleTurnScreen);
+  window.application.renderBlock('scissors-button', doubleTurnScreen);
+  window.application.renderBlock('papper-button', doubleTurnScreen);
+}
+
+function renderWaitingTurnScreen() {
+  app.textContent = '';
+  const waitingTurnScreen = document.createElement('div');
+  waitingTurnScreen.classList.add('waiting-enemy-block');
+  waitingTurnScreen.classList.add('loader');
+  waitingTurnScreen.classList.add('screen');
+  app.appendChild(waitingTurnScreen);
+
+  window.application.timers.push(setInterval(turnCheck, 500));
+}
+
+window.application.screens['waiting-game-screen'] = renderWaitingGameScreen;
+
+window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
+
+function waitingForStart() {
+  request('http://localhost:3000/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+    if (data.status === 'error') {
+      console.log(data.status + data.messague);
+    } else {
+      let gameStatus = data['game-status'];
+      if (gameStatus.status !== 'waiting-for-start') {
+        window.application.renderScreen('turn');
+      }
+    }
+  });
+}
+
+function renderWaitingGameBlock(container) {
+  const waitingGameText = document.createElement('h1');
+  waitingGameText.textContent = 'Идет поиск противника..';
+  waitingGameText.classList.add('waiting-game-block');
+  container.appendChild(waitingGameScreen);
+}
+
+function renderWaitingGameScreen() {
+  app.textContent = '';
+
+  const waitingGameScreen = document.createElement('div');
+  waitingGameScreen.classList.add('waiting-game-screen');
+  waitingGameScreen.classList.add('loader');
+  waitingGameScreen.classList.add('screen');
+  app.appendChild(waitingGameScreen);
+
+  window.application.renderBlock('waiting-game-block', waitingGameScreen);
+  window.application.timers.push(setInterval(waitingForStart, 500));
 }
