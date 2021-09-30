@@ -1,6 +1,7 @@
 // затягиваем аудио
 let audioEl = document.querySelector('.audio');
 const app = document.querySelector('.app');
+const httpBack = 'http://localhost:3000';
 
 //функция воспроизведения
 function audioPlay() {
@@ -31,6 +32,7 @@ window.application.blocks['login-button'] = renderLoginButton;
 window.application.blocks['startGame-button'] = renderStartGameButton;
 window.application.blocks['lobby-button'] = renderLobbyButton;
 window.application.blocks['play-button'] = renderPlayButton;
+window.application.blocks['back-button'] = renderBackButton;
 
 //Вызов
 window.application.renderScreen('startGame-screen');
@@ -56,7 +58,8 @@ function renderStartGameButton(container) {
   startGameButton.classList.add('button');
 
   startGameButton.addEventListener('click', event => {
-    request('http://localhost:3000/ping', '', function (data) {
+    request(httpBack+'/ping', '', function (data) {
+      //прописать бекэнд
       if (data.status === 'ok') {
         window.application.renderScreen('login-screen');
       } else {
@@ -96,29 +99,29 @@ function renderLoginButton(container) {
   loginInput.classList.add('login-input');
 
   const loginButton = document.createElement('button');
-  loginButton.textContent = 'Зарегистрировать/проверить игрока';
-  loginButton.classList.add('play-button');
+
+  loginButton.textContent = 'ВОЙТИ';
+  loginButton.classList.add('login-button');
   loginButton.classList.add('button');
 
   loginButton.addEventListener('click', event => {
     if (loginInput.value !== '') {
-      request('http://localhost:3000/login', loginInput.value, function (data) {
+      request(httpBack+'/login', {login: loginInput.value}, function (data) {
+        //ставить setInterval пока не случится data.status === ok?
         if (data.status === 'ok') {
-          player.token = data.token;
-          request('http://localhost:3000/player-status', { token: window.application.player.token }, function (element) {
+          window.application.player.token = data.token;
+          request(httpBack+'/player-status', {token: window.application.player.token}, function (element) {
             if (element['player-status'].status === 'lobby') {
               window.application.renderScreen('lobby-screen');
             }
             if (element['player-status'].status === 'game') {
-              window.application.renderScreen('turn-screen');
-            } else {
-              console.log(data.messague);
+              window.application.renderScreen('turn');
             }
           });
         }
       });
     } else {
-      console.log(data.messague);
+      alert(data.message);
     }
   });
   container.appendChild(loginInput);
@@ -147,7 +150,6 @@ function renderLobbyBlock(container) {
   const lobbyBlockText = document.createElement('textarea');
 
   lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
-
   lobbyText.classList.add('win-title');
   lobbyBlockText.classList.add('lobby-list');
 
@@ -164,6 +166,7 @@ function renderLobbyScreen() {
   app.appendChild(lobbyScreen);
   window.application.renderBlock('lobby-block', lobbyScreen);
   window.application.renderBlock('play-button', lobbyScreen);
+  window.application.renderBlock('back-button', lobbyScreen);
 
   const replayButton = document.querySelector('.play-button');
   replayButton.textContent = 'Играть';
@@ -171,8 +174,8 @@ function renderLobbyScreen() {
 
 function renderWinBlock(container) {
   const winText = document.createElement('h1');
-  winText.textContent = 'Ты победил!';
 
+  winText.textContent = 'Ты победил!';
   winText.classList.add('result-title');
 
   container.appendChild(winText);
@@ -205,20 +208,19 @@ function renderLobbyButton(container) {
 
   container.appendChild(lobbyButton);
 }
-
+// Play button in lobby
 function renderPlayButton(container) {
   const playButton = document.createElement('button');
-  playButton.textContent = 'Играть!';
 
+  playButton.textContent = 'Играть!';
   playButton.classList.add('play-button');
   playButton.classList.add('button');
-  playButton.classList.add('play-button');
 
   playButton.addEventListener('click', event => {
-    request('http://localhost:3000/start', { token: window.application.player.token }, function (data) {
+    request(httpBack+'/start', { token: window.application.player.token }, function (data) {
       if (data.status === 'ok') {
         window.application.player.gameId = data['player-status'].game.id;
-        window.application.renderScreen('waitGame-screen');
+        window.application.renderScreen('waiting-game-screen');
       }
       if (data.status === 'error') {
         alert(data.message);
@@ -227,6 +229,17 @@ function renderPlayButton(container) {
   });
 
   container.appendChild(playButton);
+}
+
+function renderBackButton(container){
+  const backButton = document.createElement('button');
+
+  backButton.textContent = 'НАЗАД';
+  backButton.classList.add('button');
+  backButton.addEventListener('click', event => {
+    window.application.renderScreen('login-screen');
+  });
+  container.appendChild(backButton);
 }
 
 function renderResultImage(container, imagePath) {
@@ -264,8 +277,6 @@ function renderFailScreen() {
 
   app.appendChild(failScreen);
 
-  renderResultImage(failScreen, 'img/sad.png');
-
   window.application.renderBlock('fail-block', failScreen);
   window.application.renderBlock('lobby-button', failScreen);
   window.application.renderBlock('play-button', failScreen);
@@ -285,7 +296,7 @@ window.application.blocks['scissors-button'] = renderScissorsButton;
 window.application.blocks['papper-button'] = renderPapperButton;
 
 function turnCheck() {
-  request('http://localhost:3000/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request(httpBack+'/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     if (data.status === 'error') {
       console.log(data.status + data.messague);
     } else {
@@ -328,7 +339,7 @@ function renderStoneButton(container) {
 
   stoneButton.addEventListener('click', e => {
     request(
-      'http://localhost:3000/play',
+      httpBack+'/play',
       { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' },
       function (data) {
         if (data.status !== 'error') {
@@ -359,7 +370,7 @@ function renderScissorsButton(container) {
 
   scissorsButton.addEventListener('click', e => {
     request(
-      'http://localhost:3000/play',
+      httpBack+'/play',
       { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' },
       function (data) {
         if (data.status !== 'error') {
@@ -389,7 +400,7 @@ function renderPapperButton(container) {
 
   papperButton.addEventListener('click', e => {
     request(
-      'http://localhost:3000/play',
+      httpBack+'/play',
       { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' },
       function (data) {
         if (data.status !== 'error') {
@@ -453,7 +464,7 @@ window.application.screens['waiting-game-screen'] = renderWaitingGameScreen;
 window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
 
 function waitingForStart() {
-  request('http://localhost:3000/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request(httpBack+'/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     if (data.status === 'error') {
       console.log(data.status + data.messague);
     } else {
