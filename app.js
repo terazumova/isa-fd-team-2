@@ -277,8 +277,6 @@ window.application.blocks['stone-button'] = renderStoneButton
 window.application.blocks['scissors-button'] = renderScissorsButton
 window.application.blocks['papper-button'] = renderPapperButton
 
-window.application.renderScreen('turn')
-
 function turnCheck(){
   request("/game-status", {token: window.application.player.token, id: window.application.player.gameId}, function(data){
     if (data.status === "error"){
