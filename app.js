@@ -218,7 +218,7 @@ function renderPlayButton(container) {
     request('http://localhost:3000/start', { token: window.application.player.token }, function (data) {
       if (data.status === 'ok') {
         window.application.player.gameId = data['player-status'].game.id;
-        window.application.renderScreen('waitGame-screen');
+        window.application.renderScreen('waiting-game-screen');
       }
       if (data.status === 'error') {
         alert(data.message);
