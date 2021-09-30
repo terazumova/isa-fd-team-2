@@ -1,13 +1,13 @@
 @font-face {
-  font-family: "Chava-Regular";
-  src: url("./fonts/Chava-Regular.woff2") format("woff2");
+  font-family: 'Chava-Regular';
+  src: url('./fonts/Chava-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "StarseedPro-Regular";
-  src: url("./fonts/StarseedPro-Regular.woff2") format("woff2");
+  font-family: 'StarseedPro-Regular';
+  src: url('./fonts/StarseedPro-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
@@ -149,19 +149,7 @@ a {
 }
 
 .result-title {
-  font-family: "StarseedPro-Regular";
-}
-
-.lobby-button,
-.play-button {
-  min-width: 200px;
-  height: 70px;
-  margin-top: 10px;
-  background-color: #fedd14;
-  border: none;
-  font-size: 20px;
-  font-weight: 400;
-  font-family: Chava-Regular;
+  font-family: 'StarseedPro';
 }
 
 .lobby-button {
@@ -175,7 +163,18 @@ a {
   background-color: #e5ac21;
 }
 
+.result-title {
+  padding: 20px 0px;
+  color: #000000;
+}
+
+.loser-text {
+  font-family: 'StarseedPro';
+  font-size: 30px;
+  color: #fedd14;
+}
+
 .result-image {
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
 }
