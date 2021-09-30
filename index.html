@@ -60,7 +60,8 @@
             return;
           }
 
-          const responseObject = event.target.response;
+          const responseString = event.target.response;
+          const responseObject = JSON.parse(responseString);
           callback(responseObject);
         });
 
