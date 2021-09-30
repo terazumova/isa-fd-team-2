@@ -33,6 +33,13 @@
             console.log('Такого экрана не существует.');
             return;
           }
+
+          this.timers.forEach(timer => {
+            clearInterval(timer);
+          });
+
+          this.timers = [];
+
           this.screens[screenName]();
         },
         renderBlock: function (blockName, container) {
