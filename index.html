@@ -30,22 +30,22 @@
         screens: {},
         renderScreen: function (screenName) {
           if (!this.screens.hasOwnProperty(screenName)) {
-            console.log("Такого экрана не существует.");
+            console.log('Такого экрана не существует.');
             return;
           }
           this.screens[screenName]();
         },
         renderBlock: function (blockName, container) {
           if (!this.blocks.hasOwnProperty(blockName)) {
-            console.log("Такого блока не существует.");
+            console.log('Такого блока не существует.');
             return;
           }
           this.blocks[blockName](container);
         },
         timers: [],
         player: {
-          token: "",
-          gameId: "",
+          token: '',
+          gameId: '',
         },
       };
 
@@ -53,9 +53,9 @@
         path += formatParameters(parameters);
 
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", path);
+        xhr.open('GET', path);
 
-        xhr.addEventListener("readystatechange", event => {
+        xhr.addEventListener('readystatechange', event => {
           if (event.target.readyState !== 4) {
             return;
           }
@@ -70,12 +70,12 @@
 
       function formatParameters(parameters) {
         return (
-          "?" +
+          '?' +
           Object.keys(parameters)
             .map(function (key) {
               return `${key}=${encodeURIComponent(parameters[key])}`;
             })
-            .join("&")
+            .join('&')
         );
       }
     </script>
