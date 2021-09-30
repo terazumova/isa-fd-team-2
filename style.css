@@ -122,15 +122,14 @@ button:hover{
 }
 
 .startGame-paragraph {
-  min-width: 200px;
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  text-align: justify;
+  width: 100%;
+}
 
-  font-family: "Chava-Regular";
-  color: #000;
-  font-size: 16px;
+.startGame-screen {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .startGame-button {
