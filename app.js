@@ -41,8 +41,8 @@ function renderStartGameBlock(container) {
   startGameTitle.textContent = 'Камень-ножницы-бумага';
   startGameTitle.classList.add('startGame-title');
 
-  const startGameParagraph = document.createElement('p');
-  startGameParagraph.textContent = 'Прописываем правила игры';
+  const startGameParagraph = document.createElement('img');
+  startGameParagraph.src = './img/rules.png';
   startGameParagraph.classList.add('startGame-paragraph');
 
   container.appendChild(startGameTitle);
@@ -56,12 +56,11 @@ function renderStartGameButton(container) {
   startGameButton.classList.add('button');
 
   startGameButton.addEventListener('click', event => {
-    request('/ping', '', function (data) {
-      //прописать бекэнд
+    request('http://localhost:3000/ping', '', function (data) {
       if (data.status === 'ok') {
         window.application.renderScreen('login-screen');
       } else {
-        console.log('Проблемы с бекэндом'); //прописать стили и мб добавить блок при отсутствии соединения?
+        console.log(data.messague);
       }
     });
   });
@@ -103,26 +102,23 @@ function renderLoginButton(container) {
 
   loginButton.addEventListener('click', event => {
     if (loginInput.value !== '') {
-      request('/login', loginInput.value, function (data) {
-        //ставить setInterval пока не случится data.status === ok?
+      request('http://localhost:3000/login', loginInput.value, function (data) {
         if (data.status === 'ok') {
           player.token = data.token;
-          request('/player-status', { token: window.application.player.token }, function (element) {
+          request('http://localhost:3000/player-status', { token: window.application.player.token }, function (element) {
             if (element['player-status'].status === 'lobby') {
-              //при сохранении добавляет пробел, может отразиться на работе
               window.application.renderScreen('lobby-screen');
             }
             if (element['player-status'].status === 'game') {
-              //при сохранении добавляет пробел, может отразиться на работе
               window.application.renderScreen('turn-screen');
             } else {
-              console.log('Ошибка');
+              console.log(data.messague);
             }
           });
         }
       });
     } else {
-      console.log('отсутствует логин'); //прописать стили и мб добавить блок при отсутствии логина?
+      console.log(data.messague);
     }
   });
   container.appendChild(loginInput);
