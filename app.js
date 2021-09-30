@@ -265,8 +265,6 @@ function renderFailScreen() {
   replayButton.textContent = 'Играть еще!';
 }
 
-const app = document.querySelector('.app')
-
 window.application.screens['turn'] = renderTurnScreen
 window.application.screens['double-turn'] = renderDoubleTurnScreen
 window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen
@@ -278,9 +276,9 @@ window.application.blocks['scissors-button'] = renderScissorsButton
 window.application.blocks['papper-button'] = renderPapperButton
 
 function turnCheck(){
-  request("/game-status", {token: window.application.player.token, id: window.application.player.gameId}, function(data){
+  request('http://localhost:3000/game-status', {token: window.application.player.token, id: window.application.player.gameId}, function(data){
     if (data.status === "error"){
-      console.log(data.messague)
+      console.log(data.status + data.messague)
     } else{
       let gameStatus = data['game-status']
       if(gameStatus.status === "win") {
@@ -289,8 +287,6 @@ function turnCheck(){
           window.application.renderScreen('fail-screen')
         }else if(gameStatus.status === "waiting-for-your-move"){
           window.application.renderScreen('double-turn')}
-
-
     }
   })
 }
@@ -318,10 +314,11 @@ function renderStoneButton(container){
   const stoneButton = document.createElement('button')
   stoneButton.textContent = 'Камень'
   stoneButton.classList.add('stone-button')
+  stoneButton.classList.add('button')
   container.appendChild(stoneButton)
 
   stoneButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "rock"}, function (data) {
+        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "rock"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
@@ -334,7 +331,7 @@ function renderStoneButton(container){
           window.application.renderScreen('double-turn')
         }
       } else{
-        console.log(data.status)
+        console.log(data.status + data.messague)
       }
     })   
   })
@@ -345,10 +342,11 @@ function renderScissorsButton(container){
   const scissorsButton = document.createElement('button')
   scissorsButton.textContent = 'Ножницы'
   scissorsButton.classList.add('scissors-button')
+  scissorsButton.classList.add('button')
   container.appendChild(scissorsButton)
 
   scissorsButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "scissors"}, function (data) {
+        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "scissors"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
@@ -361,7 +359,7 @@ function renderScissorsButton(container){
           window.application.renderScreen('double-turn')
           }
         } else{
-        console.log(data.status)}
+        console.log(data.status + data.messague)}
       }
     )   
   })
@@ -371,10 +369,11 @@ function renderPapperButton(container){
   const papperButton = document.createElement('button')
   papperButton.textContent = 'Бумага'
   papperButton.classList.add('papper-button')
+  papperButton.classList.add('button')
   container.appendChild(papperButton)
 
   papperButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "paper"}, function (data) {
+        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "paper"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
@@ -387,7 +386,7 @@ function renderPapperButton(container){
           window.application.renderScreen('double-turn')
           }
         }else{
-        console.log(data.status)}
+        console.log(data.status + data.messague)}
       }
     )   
   })
@@ -398,6 +397,7 @@ function renderTurnScreen(){
   app.textContent = ''
   const turnScreen = document.createElement('div')
   turnScreen.classList.add('turn-screen')
+  turnScreen.classList.add('screen')
   app.appendChild(turnScreen)
 
   window.application.renderBlock('turn-block', turnScreen)
@@ -410,6 +410,7 @@ function renderDoubleTurnScreen(){
   app.textContent = ''
   const doubleTurnScreen = document.createElement('div')
   doubleTurnScreen.classList.add('turn-screen')
+  doubleTurnScreen.classList.add('screen')
   app.appendChild(turnScreen)
 
   window.application.renderBlock('double-turn-block', doubleTurnScreen)
@@ -423,7 +424,47 @@ function renderWaitingTurnScreen(){
   const waitingTurnScreen = document.createElement('div')
   waitingTurnScreen.classList.add('waiting-enemy-block')
   waitingTurnScreen.classList.add('loader')
+  waitingTurnScreen.classList.add('screen')
   app.appendChild(waitingTurnScreen)
 
-  setInterval(turnCheck, 500)
+  window.application.timers.push(setInterval(turnCheck, 500))
+}
+
+
+window.application.screens['waiting-game-screen'] = renderWaitingGameScreen
+
+window.application.blocks['waiting-game-block'] = renderWaitingGameBlock
+
+function waitingForStart(){
+  request('http://localhost:3000/game-status', {token: window.application.player.token, id: window.application.player.gameId}, function(data){
+    if (data.status === "error"){
+      console.log(data.status + data.messague)
+    } else{
+      let gameStatus = data['game-status']
+      if(gameStatus.status !== "waiting-for-start") {
+          window.application.renderScreen('turn')
+        }
+  }
+})
+}
+
+function renderWaitingGameBlock(container){
+  const waitingGameText = document.createElement('h1')
+  waitingGameText.textContent = 'Идет поиск противника..'
+  waitingGameText.classList.add('waiting-game-block')
+  container.appendChild(waitingGameScreen)
+
+} 
+
+function renderWaitingGameScreen(){   
+  app.textContent = ''
+
+  const waitingGameScreen = document.createElement('div')
+  waitingGameScreen.classList.add('waiting-game-screen')
+  waitingGameScreen.classList.add('loader')
+  waitingGameScreen.classList.add('screen')
+  app.appendChild(waitingGameScreen)
+
+  window.application.renderBlock('waiting-game-block', waitingGameScreen)
+  window.application.timers.push(setInterval(waitingForStart, 500))
 }

@@ -20,7 +20,7 @@
 
     font-family: ChavaRegular, Helvetica, sans-serif;
 }
-.turn-screen{
+.screen{
     width: 100%;
     height: 100vh;
 
@@ -46,7 +46,7 @@
     box-shadow: 5px 5px #000;
 }
 
-button:hover{
+.button:hover{
     cursor: pointer;
     color: #fff;
     background-color: #e5ac21;
@@ -63,15 +63,6 @@ button:hover{
 .papper-button:hover{
     background-image: url(./img/left-list.png);
     background-size: cover;
-}
-
-.lobby-button:hover,
-.play-button:hover,
-.startGame-button,
-.login-button {
-  cursor: pointer;
-  
-  background-color: #e5ac21;
 }
 
 .fail-screen,
