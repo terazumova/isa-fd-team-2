@@ -1,13 +1,13 @@
 @font-face {
-  font-family: "Chava-Regular";
-  src: url("./fonts/Chava-Regular.woff2") format("woff2");
+  font-family: 'Chava-Regular';
+  src: url('./fonts/Chava-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "StarseedPro-Regular";
-  src: url("./fonts/StarseedPro-Regular.woff2") format("woff2");
+  font-family: 'StarseedPro-Regular';
+  src: url('./fonts/StarseedPro-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
@@ -149,7 +149,7 @@ a {
 }
 
 .result-title {
-  font-family: "StarseedPro-Regular";
+  font-family: 'StarseedPro-Regular';
 }
 
 .lobby-button,
