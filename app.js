@@ -63,7 +63,7 @@ function renderStartGameButton(container) {
       if (data.status === 'ok') {
         window.application.renderScreen('login-screen');
       } else {
-        console.log('Проблемы с бекэндом'); //прописать стили и мб добавить блок при отсутствии соединения?
+        console.log(data.messague);
       }
     });
   });
@@ -112,13 +112,10 @@ function renderLoginButton(container) {
           window.application.player.token = data.token;
           request(httpBack+'/player-status', {token: window.application.player.token}, function (element) {
             if (element['player-status'].status === 'lobby') {
-              //при сохранении добавляет пробел, может отразиться на работе
               window.application.renderScreen('lobby-screen');
             }
             if (element['player-status'].status === 'game') {
               window.application.renderScreen('turn');
-            } else {
-              //alert(data.message);
             }
           });
         }
