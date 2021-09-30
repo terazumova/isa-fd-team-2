@@ -480,7 +480,7 @@ function renderWaitingGameBlock(container) {
   const waitingGameText = document.createElement('h1');
   waitingGameText.textContent = 'Идет поиск противника..';
   waitingGameText.classList.add('waiting-game-block');
-  container.appendChild(waitingGameScreen);
+  container.appendChild(waitingGameText);
 }
 
 function renderWaitingGameScreen() {
