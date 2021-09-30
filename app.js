@@ -265,7 +265,6 @@ function renderFailScreen() {
   replayButton.textContent = 'Играть еще!';
 }
 
-const app = document.querySelector('.app')
 
 window.application.screens['turn'] = renderTurnScreen
 window.application.screens['double-turn'] = renderDoubleTurnScreen
