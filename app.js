@@ -276,7 +276,7 @@ window.application.blocks['scissors-button'] = renderScissorsButton
 window.application.blocks['papper-button'] = renderPapperButton
 
 function turnCheck(){
-  request("/game-status", {token: window.application.player.token, id: window.application.player.gameId}, function(data){
+  request('http://localhost:3000/game-status', {token: window.application.player.token, id: window.application.player.gameId}, function(data){
     if (data.status === "error"){
       console.log(data.status + data.messague)
     } else{
@@ -314,10 +314,11 @@ function renderStoneButton(container){
   const stoneButton = document.createElement('button')
   stoneButton.textContent = 'Камень'
   stoneButton.classList.add('stone-button')
+  stoneButton.classList.add('button')
   container.appendChild(stoneButton)
 
   stoneButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "rock"}, function (data) {
+        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "rock"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
@@ -341,10 +342,11 @@ function renderScissorsButton(container){
   const scissorsButton = document.createElement('button')
   scissorsButton.textContent = 'Ножницы'
   scissorsButton.classList.add('scissors-button')
+  scissorsButton.classList.add('button')
   container.appendChild(scissorsButton)
 
   scissorsButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "scissors"}, function (data) {
+        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "scissors"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
@@ -367,10 +369,11 @@ function renderPapperButton(container){
   const papperButton = document.createElement('button')
   papperButton.textContent = 'Бумага'
   papperButton.classList.add('papper-button')
+  papperButton.classList.add('button')
   container.appendChild(papperButton)
 
   papperButton.addEventListener('click', e =>{
-        request("/play", {token: window.application.player.token, id: window.application.player.gameId, move: "paper"}, function (data) {
+        request('http://localhost:3000/play', {token: window.application.player.token, id: window.application.player.gameId, move: "paper"}, function (data) {
       if (data.status !== "error"){
         let gameStatus = data['game-status']
         if (gameStatus.status === "waiting-for-enemy-move") {
@@ -433,7 +436,7 @@ window.application.screens['waiting-game-screen'] = renderWaitingGameScreen
 window.application.blocks['waiting-game-block'] = renderWaitingGameBlock
 
 function waitingForStart(){
-  request("/game-status", {token: window.application.player.token, id: window.application.player.gameId}, function(data){
+  request('http://localhost:3000/game-status', {token: window.application.player.token, id: window.application.player.gameId}, function(data){
     if (data.status === "error"){
       console.log(data.status + data.messague)
     } else{
