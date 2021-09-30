@@ -50,7 +50,7 @@ a{
 }
 
 .button{
-  min-width: 200px;
+  min-width: 222px;
   height: 70px;
   margin-top: 10px;
   background-color: #fedd14;
@@ -87,11 +87,11 @@ a{
   height: 100vh;
 }
 
-.lobby-button,
+/* .lobby-button,
 .play-button,
 .startGame-button,
 .login-button {
-  min-width: 200px;
+  min-width: 222px;
   height: 70px;
   margin-top: 10px;
   background-color: #fedd14;
@@ -99,14 +99,26 @@ a{
   font-size: 20px;
   font-weight: 400;
   font-family: Chava;
+  padding: 20px;
+} */
+
+.lobby-button {
+  font-size: 18px;
 }
 
-.result-image {
-  width: 70px;
-  height: 70px;
+.loser-text {
+  margin: 0px;
+
+  font-family: StarseedPro;
+  font-size: 60px;
+  color: #fedd14;
+  text-shadow: 3px 3px #000;
+
+  letter-spacing: 3px;
 }
 
-.authorization-block {
+.authorization-block,
+.lobby-screen {
   width: 100%;
   height: 100vh;
   box-sizing: border-box;
@@ -114,7 +126,17 @@ a{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
+}
+
+.win-title{
+  text-align: center;
+}
+
+.lobby-list{
+  width: 80%;
+  max-width: 222px;
+  height: 222px;
+  margin: 20px;
 }
 
 .startGame-title,
@@ -127,27 +149,24 @@ a{
 }
 
 .startGame-paragraph {
-  min-width: 200px;
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  text-align: justify;
-  font-family: Chava;
-  color: #000;
-  font-size: 16px;
+  width: 50%;
+  margin: 50px 0 50px 0;
 }
 
 .startGame-button {
-  width: 200px;
+  width: 222px;
 }
 
 .login-input {
   margin-top: 20px;
   margin-bottom: 20px;
+  width: 80%;
+  max-width: 222px;
   border: 2px solid #000;
   font-family: Chava;
   color: #000;
-  font-size: 16px;
+  font-size: 40px;
+  text-align: center;
 }
 
 .loader {
@@ -217,15 +236,9 @@ a{
   color: #000000;
 }
 
-.loser-text {
-  font-family: StarseedPro;
-  font-size: 30px;
-  color: #fedd14;
-}
-
 .result-image {
-  width: 100px;
-  height: 100px;
+  width: 222px;
+  height: 222px;
 }
   
 .info__text {
