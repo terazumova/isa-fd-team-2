@@ -61,6 +61,12 @@
           }
 
           const responseString = event.target.response;
+          if (!responseString || responseString === '') {
+            alert('Кажется, что-то пошло не так..');
+
+            return;
+          }
+
           const responseObject = JSON.parse(responseString);
           callback(responseObject);
         });

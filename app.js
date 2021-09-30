@@ -206,7 +206,7 @@ function renderPlayButton(container) {
   playButton.classList.add('play-button');
 
   playButton.addEventListener('click', event => {
-    request('/start', { token: window.application.player.token }, function (data) {
+    request('http://localhost:3000/start', { token: window.application.player.token }, function (data) {
       if (data.status === 'ok') {
         window.application.player.gameId = data['player-status'].game.id;
         window.application.renderScreen('waitGame-screen');
