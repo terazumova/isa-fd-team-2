@@ -1,149 +1,90 @@
 @font-face {
-  font-family: "Chava-Regular";
-  src: url("./fonts/Chava-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
+    font-family: Chava;
+    src: url(./fonts/Chava-Regular.woff2) format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: fallback;
+  }
+
+  @font-face {
+    font-family: StarseedPro;
+    src: url(./fonts/StarseedPro-Regular.woff2) format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: fallback;
+  }
+
+.app{
+    width: 100%;
+    height: 100vh;
+
+    font-family: ChavaRegular, Helvetica, sans-serif;
+}
+.turn-screen{
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: StarseedPro ;
 }
 
-@font-face {
-  font-family: "StarseedPro-Regular";
-  src: url("./fonts/StarseedPro-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
+.button{
+    min-width: 200px;
+    height: 70px;
+
+    margin-top: 10px;
+
+    background-color: #fedd14;
+    border: none;
+
+    font-family: Chava;
+    font-size: 20px;
+
+    box-shadow: 5px 5px #000;
 }
 
-html,
-body {
-  height: 100%;
-  background-color: #333;
-  font-family: consolas, monospace, Chava-Regular, StarseedPro-Regular;
-  color: #fff;
-  font-size: 16px;
+button:hover{
+    cursor: pointer;
+    color: #fff;
+    background-color: #e5ac21;
 }
 
-*,
-*:before,
-*:after {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  box-sizing: border-box;
+.scissors-button:hover{
+    background-image: url(./img/left-cut.png);
+    background-size: cover;    
 }
-
-a {
-  text-decoration: none;
+.stone-button:hover{
+    background-image: url(./img/left-stone.png);
+    background-size: cover;
 }
-
-.info {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  z-index: 50;
-}
-
-.info__icon {
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  border: 1px solid #fff;
-  font-size: 20px;
-  color: #fff;
-  text-align: center;
-  line-height: 23px;
-  position: relative;
-  z-index: 2;
-}
-
-.mute-button {
-  color: #fff;
-  background-color: transparent;
-  border: 1px solid #fff;
-  font-weight: 600;
-  line-height: 23px;
-}
-
-.info__body {
-  display: none;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: #000;
-  width: 250px;
-  border-radius: 0 0 18px 0;
-  padding: 40px 5px 35px 20px;
-}
-
-.audio {
-  display: none;
-}
-
-.lobby-text_area {
-  width: 400px;
-  height: 400px;
-}
-
-.info__body:target {
-  display: block;
-}
-
-.info__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 18px;
-  color: #fff;
-}
-
-.info__text {
-  padding: 0px 10px 0px 0px;
-}
-
-.info__text p {
-  margin: 0px 0px 10px 0px;
-}
-
-.info__text p:last-child {
-  margin: 0;
-}
-
-.app {
-  width: 100%;
-  height: 100vh;
-}
-
-.lobby-list {
-  width: 300px;
-  height: 300px;
-  margin: 10px 0 10px 0;
+.papper-button:hover{
+    background-image: url(./img/left-list.png);
+    background-size: cover;
 }
 
 .lobby-button:hover,
-.play-button:hover {
+.play-button:hover,
+.startGame-button,
+.login-button {
   cursor: pointer;
+  
   background-color: #e5ac21;
 }
 
 .fail-screen,
 .win-screen,
-.login-screen,
 .startGame-screen,
-.lobby-screen {
+.login-screen {
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* background-color: #fff; */
 }
-
-.result-title {
-  font-family: "StarseedPro-Regular";
-}
-
 .lobby-button,
-.play-button {
+.play-button,
+.startGame-button,
+.login-button {
   min-width: 200px;
   height: 70px;
   margin-top: 10px;
@@ -153,19 +94,412 @@ a {
   font-weight: 400;
   font-family: Chava-Regular;
 }
-
-.lobby-button {
-  font-size: 18px;
-}
-
-.lobby-button:hover,
-.play-button:hover {
-  cursor: pointer;
-
-  background-color: #e5ac21;
-}
-
 .result-image {
   width: 70px;
   height: 70px;
+}
+
+.authorization-block {
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #fff;
+
+}
+
+.startGame-title,
+.login-title {
+  display: flex;
+  align-items: center;
+  font-family: "StarseedPro-Regular";
+  color: #000;
+  font-size: 24px;
+}
+
+.startGame-paragraph {
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  text-align: justify;
+
+  font-family: "Chava-Regular";
+  color: #000;
+  font-size: 16px;
+}
+
+.startGame-button {
+  width: 200px;
+}
+
+.login-input {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 2px solid #000;
+
+  font-family: "Chava-Regular";
+  color: #000;
+  font-size: 16px;
+}
+.loader {
+    animation: spin 1s linear infinite;
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -5px;
+}
+
+@keyframes spin {
+    0% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px #e5ac21,
+            20px -20px #e5ac21,
+            30px -10px #e5ac21,
+            30px 0px #e5ac21,
+            30px 10px #e5ac21,
+            20px 20px #e5ac21,
+            10px 30px #e5ac21,
+            0px 30px transparent,
+            -10px 30px transparent,
+            -20px 20px transparent,
+            -30px 10px transparent,
+            -30px 0px transparent,
+            -30px -10px transparent,
+            -20px -20px transparent,
+            -10px -30px transparent;
+    }
+
+    6.25% {
+        box-shadow:
+            0px -30px transparent,
+            10px -30px #e5ac21,
+            20px -20px #e5ac21,
+            30px -10px #e5ac21,
+            30px 0px #e5ac21,
+            30px 10px #e5ac21,
+            20px 20px #e5ac21,
+            10px 30px #e5ac21,
+            0px 30px #e5ac21,
+            -10px 30px transparent,
+            -20px 20px transparent,
+            -30px 10px transparent,
+            -30px 0px transparent,
+            -30px -10px transparent,
+            -20px -20px transparent,
+            -10px -30px transparent;
+    }
+
+    12.5% {
+        box-shadow:
+            0px -30px transparent,
+            10px -30px transparent,
+            20px -20px #e5ac21,
+            30px -10px #e5ac21,
+            30px 0px #e5ac21,
+            30px 10px #e5ac21,
+            20px 20px #e5ac21,
+            10px 30px #e5ac21,
+            0px 30px #e5ac21,
+            -10px 30px #e5ac21,
+            -20px 20px transparent,
+            -30px 10px transparent,
+            -30px 0px transparent,
+            -30px -10px transparent,
+            -20px -20px transparent,
+            -10px -30px transparent;
+    }
+
+    18.75% {
+        box-shadow:
+            0px -30px transparent,
+            10px -30px transparent,
+            20px -20px transparent,
+            30px -10px #e5ac21,
+            30px 0px #e5ac21,
+            30px 10px #e5ac21,
+            20px 20px #e5ac21,
+            10px 30px #e5ac21,
+            0px 30px #e5ac21,
+            -10px 30px #e5ac21,
+            -20px 20px #e5ac21,
+            -30px 10px transparent,
+            -30px 0px transparent,
+            -30px -10px transparent,
+            -20px -20px transparent,
+            -10px -30px transparent;
+    }
+
+
+
+    25% {
+        box-shadow:
+            0px -30px transparent,
+            10px -30px transparent,
+            20px -20px transparent,
+            30px -10px transparent,
+            30px 0px #e5ac21,
+            30px 10px #e5ac21,
+            20px 20px #e5ac21,
+            10px 30px #e5ac21,
+            0px 30px #e5ac21,
+            -10px 30px #e5ac21,
+            -20px 20px #e5ac21,
+            -30px 10px #e5ac21,
+            -30px 0px transparent,
+            -30px -10px transparent,
+            -20px -20px transparent,
+            -10px -30px transparent;
+    }
+
+    31.25% {
+        box-shadow:
+            0px -30px transparent,
+            10px -30px transparent,
+            20px -20px transparent,
+            30px -10px transparent,
+            30px 0px transparent,
+            30px 10px #e5ac21,
+            20px 20px #e5ac21,
+            10px 30px #e5ac21,
+            0px 30px #e5ac21,
+            -10px 30px #e5ac21,
+            -20px 20px #e5ac21,
+            -30px 10px #e5ac21,
+            -30px 0px #e5ac21,
+            -30px -10px transparent,
+            -20px -20px transparent,
+            -10px -30px transparent;
+    }
+
+
+    37.5% {
+        box-shadow:
+            0px -30px transparent,
+            10px -30px transparent,
+            20px -20px transparent,
+            30px -10px transparent,
+            30px 0px transparent,
+            30px 10px transparent,
+            20px 20px #e5ac21,
+            10px 30px #e5ac21,
+            0px 30px #e5ac21,
+            -10px 30px #e5ac21,
+            -20px 20px #e5ac21,
+            -30px 10px #e5ac21,
+            -30px 0px #e5ac21,
+            -30px -10px #e5ac21,
+            -20px -20px transparent,
+            -10px -30px transparent;
+    }
+
+    43.75% {
+        box-shadow:
+            0px -30px transparent,
+            10px -30px transparent,
+            20px -20px transparent,
+            30px -10px transparent,
+            30px 0px transparent,
+            30px 10px transparent,
+            20px 20px transparent,
+            10px 30px #e5ac21,
+            0px 30px #e5ac21,
+            -10px 30px #e5ac21,
+            -20px 20px #e5ac21,
+            -30px 10px #e5ac21,
+            -30px 0px #e5ac21,
+            -30px -10px #e5ac21,
+            -20px -20px #e5ac21,
+            -10px -30px transparent;
+    }
+  
+    50% {
+        box-shadow:
+            0px -30px transparent,
+            10px -30px transparent,
+            20px -20px transparent,
+            30px -10px transparent,
+            30px 0px transparent,
+            30px 10px transparent,
+            20px 20px transparent,
+            10px 30px transparent,
+            0px 30px #e5ac21,
+            -10px 30px #e5ac21,
+            -20px 20px #e5ac21,
+            -30px 10px #e5ac21,
+            -30px 0px #e5ac21,
+            -30px -10px #e5ac21,
+            -20px -20px #e5ac21,
+            -10px -30px #e5ac21;
+    }
+
+    56.25% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px transparent,
+            20px -20px transparent,
+            30px -10px transparent,
+            30px 0px transparent,
+            30px 10px transparent,
+            20px 20px transparent,
+            10px 30px transparent,
+            0px 30px transparent,
+            -10px 30px #e5ac21,
+            -20px 20px #e5ac21,
+            -30px 10px #e5ac21,
+            -30px 0px #e5ac21,
+            -30px -10px #e5ac21,
+            -20px -20px #e5ac21,
+            -10px -30px #e5ac21;
+    }
+
+    62.5% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px #e5ac21,
+            20px -20px transparent,
+            30px -10px transparent,
+            30px 0px transparent,
+            30px 10px transparent,
+            20px 20px transparent,
+            10px 30px transparent,
+            0px 30px transparent,
+            -10px 30px transparent,
+            -20px 20px #e5ac21,
+            -30px 10px #e5ac21,
+            -30px 0px #e5ac21,
+            -30px -10px #e5ac21,
+            -20px -20px #e5ac21,
+            -10px -30px #e5ac21;
+    }
+
+
+    68.75% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px #e5ac21,
+            20px -20px #e5ac21,
+            30px -10px transparent,
+            30px 0px transparent,
+            30px 10px transparent,
+            20px 20px transparent,
+            10px 30px transparent,
+            0px 30px transparent,
+            -10px 30px transparent,
+            -20px 20px transparent,
+            -30px 10px #e5ac21,
+            -30px 0px #e5ac21,
+            -30px -10px #e5ac21,
+            -20px -20px #e5ac21,
+            -10px -30px #e5ac21;
+    }
+
+    75% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px #e5ac21,
+            20px -20px #e5ac21,
+            30px -10px #e5ac21,
+            30px 0px transparent,
+            30px 10px transparent,
+            20px 20px transparent,
+            10px 30px transparent,
+            0px 30px transparent,
+            -10px 30px transparent,
+            -20px 20px transparent,
+            -30px 10px transparent,
+            -30px 0px #e5ac21,
+            -30px -10px #e5ac21,
+            -20px -20px #e5ac21,
+            -10px -30px #e5ac21;
+    }
+
+    81.25% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px #e5ac21,
+            20px -20px #e5ac21,
+            30px -10px #e5ac21,
+            30px 0px #e5ac21,
+            30px 10px transparent,
+            20px 20px transparent,
+            10px 30px transparent,
+            0px 30px transparent,
+            -10px 30px transparent,
+            -20px 20px transparent,
+            -30px 10px transparent,
+            -30px 0px transparent,
+            -30px -10px #e5ac21,
+            -20px -20px #e5ac21,
+            -10px -30px #e5ac21;
+    }
+
+
+    87.5% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px #e5ac21,
+            20px -20px #e5ac21,
+            30px -10px #e5ac21,
+            30px 0px #e5ac21,
+            30px 10px #e5ac21,
+            20px 20px transparent,
+            10px 30px transparent,
+            0px 30px transparent,
+            -10px 30px transparent,
+            -20px 20px transparent,
+            -30px 10px transparent,
+            -30px 0px transparent,
+            -30px -10px transparent,
+            -20px -20px #e5ac21,
+            -10px -30px #e5ac21;
+    }
+
+    93.75% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px #e5ac21,
+            20px -20px #e5ac21,
+            30px -10px #e5ac21,
+            30px 0px #e5ac21,
+            30px 10px #e5ac21,
+            20px 20px #e5ac21,
+            10px 30px transparent,
+            0px 30px transparent,
+            -10px 30px transparent,
+            -20px 20px transparent,
+            -30px 10px transparent,
+            -30px 0px transparent,
+            -30px -10px transparent,
+            -20px -20px transparent,
+            -10px -30px #e5ac21;
+    }
+
+    100% {
+        box-shadow:
+            0px -30px #e5ac21,
+            10px -30px #e5ac21,
+            20px -20px #e5ac21,
+            30px -10px #e5ac21,
+            30px 0px #e5ac21,
+            30px 10px #e5ac21,
+            20px 20px #e5ac21,
+            10px 30px #e5ac21,
+            0px 30px transparent,
+            -10px 30px transparent,
+            -20px 20px transparent,
+            -30px 10px transparent,
+            -30px 0px transparent,
+            -30px -10px transparent,
+            -20px -20px transparent,
+            -10px -30px transparent;
+    }
 }
