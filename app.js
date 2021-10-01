@@ -1,7 +1,7 @@
 // затягиваем аудио
 let audioEl = document.querySelector('.audio');
 const app = document.querySelector('.app');
-const httpBack = 'http://localhost:3000';
+const httpBack = 'https://skypro-rock-scissors-paper.herokuapp.com';
 
 //функция воспроизведения
 function audioPlay() {
@@ -43,23 +43,19 @@ function renderStartGameBlock(container) {
   startGameTitle.textContent = 'Камень-ножницы-бумага';
   startGameTitle.classList.add('startGame-title');
 
+  container.appendChild(startGameTitle);
+
+}
+
+function renderStartGameButton(container) {
   const startGameParagraph = document.createElement('img');
   startGameParagraph.src = './img/rules.webp';
   startGameParagraph.classList.add('startGame-paragraph');
 
-  container.appendChild(startGameTitle);
   container.appendChild(startGameParagraph);
-}
 
-function renderStartGameButton(container) {
-  const startGameButton = document.createElement('button');
-  startGameButton.textContent = 'Начать игру!';
-  startGameButton.classList.add('startGame-button');
-  startGameButton.classList.add('button');
 
-  startGameButton.addEventListener('click', event => {
-    startGameButton.disabled = true;
-
+  startGameParagraph.addEventListener('click', event => {
     request(httpBack + '/ping', '', function (data) {
       if (data.status === 'ok') {
         window.application.renderScreen('login-screen');
@@ -68,7 +64,6 @@ function renderStartGameButton(container) {
       }
     });
   });
-  container.appendChild(startGameButton);
 }
 
 function renderStartGameScreen() {
@@ -113,7 +108,6 @@ function renderLoginButton(container) {
       loginButton.disabled = true;
 
       request(httpBack + '/login', { login: loginInput.value }, function (data) {
-        //ставить setInterval пока не случится data.status === ok?
         if (data.status === 'ok') {
           window.application.player.token = data.token;
           request(httpBack + '/player-status', { token: window.application.player.token }, function (element) {
@@ -127,7 +121,7 @@ function renderLoginButton(container) {
         }
       });
     } else {
-      alert(data.message);
+      alert('Заполните логин');
     }
   });
   container.appendChild(loginInput);
@@ -262,12 +256,12 @@ function renderPlayButton(container) {
 function renderBackButton(container) {
   const backButton = document.createElement('button');
 
-  backButton.textContent = 'НАЗАД';
+  backButton.textContent = 'ВЫЙТИ';
   backButton.classList.add('button');
   backButton.addEventListener('click', event => {
-    backButton.disabled = true;
-
-    window.application.renderScreen('login-screen');
+    request(httpBack + '/logout', { token: window.application.player.token }, function (data) {
+      window.application.renderScreen('login-screen');
+    })
   });
   container.appendChild(backButton);
 }
