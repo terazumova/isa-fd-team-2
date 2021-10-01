@@ -63,6 +63,7 @@ a {
   box-shadow: 5px 5px #000;
 }
 
+
 .button[disabled] {
   opacity: 0.5;
 }
@@ -75,7 +76,7 @@ a {
   background-image: none;
 }
 
-@-webkit-keyframes button {
+@-webkit-keyframes shake {
   15% {
     -webkit-transform: translateX(9px);
     transform: translateX(9px);
@@ -102,7 +103,7 @@ a {
   }
 }
 
-@keyframes button {
+@keyframes shake {
   15% {
     -webkit-transform: translateX(9px);
     transform: translateX(9px);
@@ -128,6 +129,13 @@ a {
     transform: translateX(0);
   }
 }
+  .shake:hover {
+    -webkit-animation: shake 0.6s ease;
+    animation: shake 0.6s ease;
+     -webkit-animation-iteration-count: 1;
+     animation-iteration-count: 1;
+  }
+
 
 .button:hover {
   cursor: pointer;
