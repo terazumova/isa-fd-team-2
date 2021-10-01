@@ -24,6 +24,7 @@ window.application.screens['turn'] = renderTurnScreen;
 window.application.screens['double-turn'] = renderDoubleTurnScreen;
 window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen;
 window.application.screens['waiting-game-screen'] = renderWaitingGameScreen;
+window.application.screens['vs-screen'] = renderVsScreen;
 
 // Elements
 window.application.blocks['login-block'] = renderLoginBlock;
@@ -34,6 +35,7 @@ window.application.blocks['lobby-block'] = renderLobbyBlock;
 window.application.blocks['turn-block'] = renderTurnBlock;
 window.application.blocks['double-turn-block'] = renderDoubleTurnBlock;
 window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
+window.application.blocks['vs-block'] = renderVsBlock;
 
 window.application.blocks['login-button'] = renderLoginButton;
 window.application.blocks['startGame-button'] = renderStartGameButton;
@@ -515,7 +517,29 @@ function waitingForStart() {
     }
   });
 }
+function renderVsBlock(container) {
+  const vsText1 = document.createElement('h1');
+  const vsText2 = document.createElement('h1');
+  container.appendChild(vsText1);
+  container.appendChild(vsText2);
+  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+    vsText1.textContent = `Твой противник:`;
+    vsText2.textContent = data['game-status'].enemy.login;
+  })
+}
 
+function whoIsMyEnemy() {
+  window.application.renderScreen('turn')
+}
+function renderVsScreen() {
+  app.textContent = '';
+  const vsScreen = document.createElement('div');
+  app.appendChild(vsScreen);
+
+  window.application.renderBlock('vs-block', vsScreen);
+
+  setTimeout(whoIsMyEnemy, 5000);
+}
 function renderWaitingGameBlock(container) {
   const waitingGameText = document.createElement('h1');
   waitingGameText.textContent = 'Идет поиск противника..';
