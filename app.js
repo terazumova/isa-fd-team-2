@@ -155,10 +155,10 @@ function renderLobbyBlock(container) {
       lobbyText.textContent = '';
       element.list.forEach(function(item, i, element) {
         console.log(item);
-        lobbyBlockText.value +=  `${item.login} (${item.loses} / ${item.wins})\n`;
+        lobbyBlockText.value +=  `${item.login} (${item.wins} / ${item.loses})\n`;
         if(item.you){
           lobbyText.textContent = `${item.login}`;
-          lobbyTextInfo.textContent = `ПОБЕД ${item.loses} / ПОРАЖЕНИЙ ${item.wins}`;
+          lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
         }
       });
     }
