@@ -44,7 +44,6 @@ function renderStartGameBlock(container) {
   startGameTitle.classList.add('startGame-title');
 
   container.appendChild(startGameTitle);
-
 }
 
 function renderStartGameButton(container) {
@@ -53,7 +52,6 @@ function renderStartGameButton(container) {
   startGameParagraph.classList.add('startGame-paragraph');
 
   container.appendChild(startGameParagraph);
-
 
   startGameParagraph.addEventListener('click', event => {
     request(httpBack + '/ping', '', function (data) {
@@ -93,9 +91,9 @@ function renderLoginBlock(container) {
 function renderLoginButton(container) {
   const loginInput = document.createElement('input');
   loginInput.classList.add('login-input');
-  loginInput.addEventListener('input', (e) => {
+  loginInput.addEventListener('input', e => {
     e.target.value = e.target.value.substr(0, 8);
-  })
+  });
 
   const loginButton = document.createElement('button');
 
@@ -122,6 +120,7 @@ function renderLoginButton(container) {
       });
     } else {
       alert('Заполните логин');
+      loginButton.disabled = false;
     }
   });
   container.appendChild(loginInput);
@@ -221,7 +220,7 @@ function renderLobbyButton(container) {
   lobbyButton.classList.add('button');
 
   lobbyButton.addEventListener('click', event => {
-    disableAllButtons(container);
+    disableAllButtons(container, true);
 
     window.application.renderScreen('lobby-screen');
   });
@@ -237,7 +236,7 @@ function renderPlayButton(container) {
   playButton.classList.add('button');
 
   playButton.addEventListener('click', event => {
-    disableAllButtons(container);
+    disableAllButtons(container, true);
 
     request(httpBack + '/start', { token: window.application.player.token }, function (data) {
       if (data.status === 'ok') {
@@ -246,6 +245,8 @@ function renderPlayButton(container) {
       }
       if (data.status === 'error') {
         alert(data.message);
+
+        disableAllButtons(container, false);
       }
     });
   });
@@ -260,8 +261,10 @@ function renderBackButton(container) {
   backButton.classList.add('button');
   backButton.addEventListener('click', event => {
     request(httpBack + '/logout', { token: window.application.player.token }, function (data) {
+      disableAllButtons(container, true);
+
       window.application.renderScreen('login-screen');
-    })
+    });
   });
   container.appendChild(backButton);
 }
@@ -362,7 +365,7 @@ function renderStoneButton(container) {
   container.appendChild(stoneButton);
 
   stoneButton.addEventListener('click', e => {
-    disableAllButtons(container);
+    disableAllButtons(container, true);
 
     request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' }, function (data) {
       if (data.status !== 'error') {
@@ -378,6 +381,8 @@ function renderStoneButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
+
+        disableAllButtons(container, false);
       }
     });
   });
@@ -391,7 +396,7 @@ function renderScissorsButton(container) {
   container.appendChild(scissorsButton);
 
   scissorsButton.addEventListener('click', e => {
-    disableAllButtons(container);
+    disableAllButtons(container, true);
 
     request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' }, function (data) {
       if (data.status !== 'error') {
@@ -407,6 +412,8 @@ function renderScissorsButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
+
+        disableAllButtons(container, false);
       }
     });
   });
@@ -419,7 +426,7 @@ function renderPapperButton(container) {
   container.appendChild(papperButton);
 
   papperButton.addEventListener('click', e => {
-    disableAllButtons(container);
+    disableAllButtons(container, true);
 
     request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' }, function (data) {
       if (data.status !== 'error') {
@@ -435,6 +442,8 @@ function renderPapperButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
+
+        disableAllButtons(container, false);
       }
     });
   });
@@ -514,10 +523,10 @@ function renderWaitingGameScreen() {
   window.application.timers.push(setInterval(waitingForStart, 500));
 }
 
-function disableAllButtons(container) {
+function disableAllButtons(container, isTrue) {
   const allButtons = container.querySelectorAll('.button');
 
   for (let currentButton of allButtons) {
-    currentButton.disabled = true;
+    currentButton.disabled = isTrue;
   }
 }
