@@ -152,15 +152,15 @@ function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
   const lobbyTextInfo = document.createElement('p');
   const lobbyBlockText = document.createElement('textarea');
-  
-  request(httpBack+'/player-list', {token: window.application.player.token}, function (element) {
+
+  request(httpBack + '/player-list', { token: window.application.player.token }, function (element) {
     if (element.status === 'ok') {
       lobbyBlockText.value = '';
       lobbyText.textContent = '';
-      element.list.forEach(function(item, i, element) {
+      element.list.forEach(function (item, i, element) {
         console.log(item);
-        lobbyBlockText.value +=  `${item.login} (${item.wins} / ${item.loses})\n`;
-        if(item.you){
+        lobbyBlockText.value += `${item.login} (${item.wins} / ${item.loses})\n`;
+        if (item.you) {
           lobbyText.textContent = `${item.login}`;
           lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
         }
@@ -168,7 +168,6 @@ function renderLobbyBlock(container) {
     }
     lobbyBlockText.readOnly = true;
   });
-
 
   //lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
   lobbyText.classList.add('win-title');
@@ -523,6 +522,5 @@ function disableAllButtons(container) {
 
   for (let currentButton of allButtons) {
     currentButton.disabled = true;
-    currentButton.classList.remove('hover');
   }
 }
