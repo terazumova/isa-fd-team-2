@@ -44,7 +44,7 @@ function renderStartGameBlock(container) {
   startGameTitle.classList.add('startGame-title');
 
   const startGameParagraph = document.createElement('img');
-  startGameParagraph.src = './img/rules.png';
+  startGameParagraph.src = './img/rules.webp';
   startGameParagraph.classList.add('startGame-paragraph');
 
   container.appendChild(startGameTitle);
@@ -96,6 +96,9 @@ function renderLoginBlock(container) {
 function renderLoginButton(container) {
   const loginInput = document.createElement('input');
   loginInput.classList.add('login-input');
+  loginInput.addEventListener('input', (e) => {
+    e.target.value = e.target.value.substr(0, 8);
+  })
 
   const loginButton = document.createElement('button');
 
@@ -148,15 +151,15 @@ function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
   const lobbyTextInfo = document.createElement('p');
   const lobbyBlockText = document.createElement('textarea');
-  
-  request(httpBack+'/player-list', {token: window.application.player.token}, function (element) {
+
+  request(httpBack + '/player-list', { token: window.application.player.token }, function (element) {
     if (element.status === 'ok') {
       lobbyBlockText.value = '';
       lobbyText.textContent = '';
-      element.list.forEach(function(item, i, element) {
+      element.list.forEach(function (item, i, element) {
         console.log(item);
-        lobbyBlockText.value +=  `${item.login} (${item.wins} / ${item.loses})\n`;
-        if(item.you){
+        lobbyBlockText.value += `${item.login} (${item.wins} / ${item.loses})\n`;
+        if (item.you) {
           lobbyText.textContent = `${item.login}`;
           lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
         }
@@ -276,7 +279,7 @@ function renderWinScreen() {
 
   app.appendChild(winScreen);
 
-  renderResultImage(winScreen, 'img/laurel.png');
+  renderResultImage(winScreen, 'img/laurel.webp');
 
   window.application.renderBlock('win-block', winScreen);
   window.application.renderBlock('lobby-button', winScreen);
