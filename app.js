@@ -44,7 +44,7 @@ function renderStartGameBlock(container) {
   startGameTitle.classList.add('startGame-title');
 
   const startGameParagraph = document.createElement('img');
-  startGameParagraph.src = './img/rules.png';
+  startGameParagraph.src = './img/rules.webp';
   startGameParagraph.classList.add('startGame-paragraph');
 
   container.appendChild(startGameTitle);
@@ -98,6 +98,9 @@ function renderLoginBlock(container) {
 function renderLoginButton(container) {
   const loginInput = document.createElement('input');
   loginInput.classList.add('login-input');
+  loginInput.addEventListener('input', (e) => {
+    e.target.value = e.target.value.substr(0, 8);
+  })
 
   const loginButton = document.createElement('button');
 
@@ -285,7 +288,7 @@ function renderWinScreen() {
 
   app.appendChild(winScreen);
 
-  renderResultImage(winScreen, 'img/laurel.png');
+  renderResultImage(winScreen, 'img/laurel.webp');
 
   window.application.renderBlock('win-block', winScreen);
   window.application.renderBlock('lobby-button', winScreen);
