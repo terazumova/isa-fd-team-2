@@ -53,21 +53,19 @@ function renderStartGameBlock(container) {
   startGameTitle.textContent = 'Камень-ножницы-бумага';
   startGameTitle.classList.add('startGame-title');
 
-  const startGameParagraph = document.createElement('img');
-  startGameParagraph.src = './img/rules.png';
-  startGameParagraph.classList.add('startGame-paragraph');
-
   container.appendChild(startGameTitle);
-  container.appendChild(startGameParagraph);
+
 }
 
 function renderStartGameButton(container) {
-  const startGameButton = document.createElement('button');
-  startGameButton.textContent = 'Начать игру!';
-  startGameButton.classList.add('startGame-button');
-  startGameButton.classList.add('button');
+  const startGameParagraph = document.createElement('img');
+  startGameParagraph.src = './img/rules.webp';
+  startGameParagraph.classList.add('startGame-paragraph');
 
-  startGameButton.addEventListener('click', event => {
+  container.appendChild(startGameParagraph);
+
+
+  startGameParagraph.addEventListener('click', event => {
     request(httpBack + '/ping', '', function (data) {
       if (data.status === 'ok') {
         window.application.renderScreen('login-screen');
@@ -76,7 +74,6 @@ function renderStartGameButton(container) {
       }
     });
   });
-  container.appendChild(startGameButton);
 }
 
 function renderStartGameScreen() {
@@ -106,6 +103,9 @@ function renderLoginBlock(container) {
 function renderLoginButton(container) {
   const loginInput = document.createElement('input');
   loginInput.classList.add('login-input');
+  loginInput.addEventListener('input', (e) => {
+    e.target.value = e.target.value.substr(0, 8);
+  })
 
   const loginButton = document.createElement('button');
 
@@ -115,8 +115,9 @@ function renderLoginButton(container) {
 
   loginButton.addEventListener('click', event => {
     if (loginInput.value !== '') {
+      loginButton.disabled = true;
+
       request(httpBack + '/login', { login: loginInput.value }, function (data) {
-        //ставить setInterval пока не случится data.status === ok?
         if (data.status === 'ok') {
           window.application.player.token = data.token;
           request(httpBack + '/player-status', { token: window.application.player.token }, function (element) {
@@ -130,7 +131,7 @@ function renderLoginButton(container) {
         }
       });
     } else {
-      alert(data.message);
+      alert('Заполните логин');
     }
   });
   container.appendChild(loginInput);
@@ -158,15 +159,15 @@ function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
   const lobbyTextInfo = document.createElement('p');
   const lobbyBlockText = document.createElement('textarea');
-  
-  request(httpBack+'/player-list', {token: window.application.player.token}, function (element) {
+
+  request(httpBack + '/player-list', { token: window.application.player.token }, function (element) {
     if (element.status === 'ok') {
       lobbyBlockText.value = '';
       lobbyText.textContent = '';
-      element.list.forEach(function(item, i, element) {
+      element.list.forEach(function (item, i, element) {
         console.log(item);
-        lobbyBlockText.value +=  `${item.login} (${item.wins} / ${item.loses})\n`;
-        if(item.you){
+        lobbyBlockText.value += `${item.login} (${item.wins} / ${item.loses})\n`;
+        if (item.you) {
           lobbyText.textContent = `${item.login}`;
           lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
         }
@@ -174,7 +175,6 @@ function renderLobbyBlock(container) {
     }
     lobbyBlockText.readOnly = true;
   });
-
 
   //lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
   lobbyText.classList.add('win-title');
@@ -231,6 +231,8 @@ function renderLobbyButton(container) {
   lobbyButton.classList.add('button');
 
   lobbyButton.addEventListener('click', event => {
+    disableAllButtons(container);
+
     window.application.renderScreen('lobby-screen');
   });
 
@@ -245,6 +247,8 @@ function renderPlayButton(container) {
   playButton.classList.add('button');
 
   playButton.addEventListener('click', event => {
+    disableAllButtons(container);
+
     request(httpBack + '/start', { token: window.application.player.token }, function (data) {
       if (data.status === 'ok') {
         window.application.player.gameId = data['player-status'].game.id;
@@ -262,10 +266,12 @@ function renderPlayButton(container) {
 function renderBackButton(container) {
   const backButton = document.createElement('button');
 
-  backButton.textContent = 'НАЗАД';
+  backButton.textContent = 'ВЫЙТИ';
   backButton.classList.add('button');
   backButton.addEventListener('click', event => {
-    window.application.renderScreen('login-screen');
+    request(httpBack + '/logout', { token: window.application.player.token }, function (data) {
+      window.application.renderScreen('login-screen');
+    })
   });
   container.appendChild(backButton);
 }
@@ -286,7 +292,7 @@ function renderWinScreen() {
 
   app.appendChild(winScreen);
 
-  renderResultImage(winScreen, 'img/laurel.png');
+  renderResultImage(winScreen, 'img/laurel.webp');
 
   window.application.renderBlock('win-block', winScreen);
   window.application.renderBlock('lobby-button', winScreen);
@@ -373,26 +379,24 @@ function renderStoneButton(container) {
   container.appendChild(stoneButton);
 
   stoneButton.addEventListener('click', e => {
-    request(
-      httpBack + '/play',
-      { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' },
-      function (data) {
-        if (data.status !== 'error') {
-          let gameStatus = data['game-status'];
-          if (gameStatus.status === 'waiting-for-enemy-move') {
-            window.application.renderScreen('waiting-enemy-screen');
-          } else if (gameStatus.status === 'win') {
-            window.application.renderScreen('win-screen');
-          } else if (gameStatus.status === 'lose') {
-            window.application.renderScreen('fail-screen');
-          } else if (gameStatus.status === 'waiting-for-your-move') {
-            window.application.renderScreen('double-turn');
-          }
-        } else {
-          console.log(data.status + ' ' + data.message);
+    disableAllButtons(container);
+
+    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' }, function (data) {
+      if (data.status !== 'error') {
+        let gameStatus = data['game-status'];
+        if (gameStatus.status === 'waiting-for-enemy-move') {
+          window.application.renderScreen('waiting-enemy-screen');
+        } else if (gameStatus.status === 'win') {
+          window.application.renderScreen('win-screen');
+        } else if (gameStatus.status === 'lose') {
+          window.application.renderScreen('fail-screen');
+        } else if (gameStatus.status === 'waiting-for-your-move') {
+          window.application.renderScreen('double-turn');
         }
+      } else {
+        console.log(data.status + ' ' + data.message);
       }
-    );
+    });
   });
 }
 
@@ -404,26 +408,24 @@ function renderScissorsButton(container) {
   container.appendChild(scissorsButton);
 
   scissorsButton.addEventListener('click', e => {
-    request(
-      httpBack + '/play',
-      { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' },
-      function (data) {
-        if (data.status !== 'error') {
-          let gameStatus = data['game-status'];
-          if (gameStatus.status === 'waiting-for-enemy-move') {
-            window.application.renderScreen('waiting-enemy-screen');
-          } else if (gameStatus.status === 'win') {
-            window.application.renderScreen('win-screen');
-          } else if (gameStatus.status === 'lose') {
-            window.application.renderScreen('fail-screen');
-          } else if (gameStatus.status === 'waiting-for-your-move') {
-            window.application.renderScreen('double-turn');
-          }
-        } else {
-          console.log(data.status + ' ' + data.message);
+    disableAllButtons(container);
+
+    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' }, function (data) {
+      if (data.status !== 'error') {
+        let gameStatus = data['game-status'];
+        if (gameStatus.status === 'waiting-for-enemy-move') {
+          window.application.renderScreen('waiting-enemy-screen');
+        } else if (gameStatus.status === 'win') {
+          window.application.renderScreen('win-screen');
+        } else if (gameStatus.status === 'lose') {
+          window.application.renderScreen('fail-screen');
+        } else if (gameStatus.status === 'waiting-for-your-move') {
+          window.application.renderScreen('double-turn');
         }
+      } else {
+        console.log(data.status + ' ' + data.message);
       }
-    );
+    });
   });
 }
 function renderPapperButton(container) {
@@ -434,26 +436,24 @@ function renderPapperButton(container) {
   container.appendChild(papperButton);
 
   papperButton.addEventListener('click', e => {
-    request(
-      httpBack + '/play',
-      { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' },
-      function (data) {
-        if (data.status !== 'error') {
-          let gameStatus = data['game-status'];
-          if (gameStatus.status === 'waiting-for-enemy-move') {
-            window.application.renderScreen('waiting-enemy-screen');
-          } else if (gameStatus.status === 'win') {
-            window.application.renderScreen('win-screen');
-          } else if (gameStatus.status === 'lose') {
-            window.application.renderScreen('fail-screen');
-          } else if (gameStatus.status === 'waiting-for-your-move') {
-            window.application.renderScreen('double-turn');
-          }
-        } else {
-          console.log(data.status + ' ' + data.message);
+    disableAllButtons(container);
+
+    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' }, function (data) {
+      if (data.status !== 'error') {
+        let gameStatus = data['game-status'];
+        if (gameStatus.status === 'waiting-for-enemy-move') {
+          window.application.renderScreen('waiting-enemy-screen');
+        } else if (gameStatus.status === 'win') {
+          window.application.renderScreen('win-screen');
+        } else if (gameStatus.status === 'lose') {
+          window.application.renderScreen('fail-screen');
+        } else if (gameStatus.status === 'waiting-for-your-move') {
+          window.application.renderScreen('double-turn');
         }
+      } else {
+        console.log(data.status + ' ' + data.message);
       }
-    );
+    });
   });
 }
 
@@ -525,4 +525,12 @@ function renderWaitingGameScreen() {
 
   window.application.renderBlock('waiting-game-block', waitingGameScreen);
   window.application.timers.push(setInterval(waitingForStart, 500));
+}
+
+function disableAllButtons(container) {
+  const allButtons = container.querySelectorAll('.button');
+
+  for (let currentButton of allButtons) {
+    currentButton.disabled = true;
+  }
 }
