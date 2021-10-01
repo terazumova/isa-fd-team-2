@@ -146,30 +146,23 @@ function renderLoginScreen() {
 // Lobby block text
 function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
+  const lobbyTextInfo = document.createElement('p');
   const lobbyBlockText = document.createElement('textarea');
   
-  //lobbyBlockText.addEventListener('click', event => {
-    request(httpBack+'/player-list', {token: window.application.player.token}, function (element) {
-      debugger;
-      if (element.status === 'ok') {
-        lobbyBlockText.value = '';
-        lobbyText.textContent = '';
-        debugger;  
-        element.list.forEach(function(item, i, element) {
-          console.log(item);
-          lobbyBlockText.value +=  `${item.login} (${item.loses} / ${item.wins})\n`;
-          if(item.you){
-            lobbyText.textContent = `${item.login} ПОБЕД ${item.loses} / ПОРАЖЕНИЙ ${item.wins}\n`
-          }
-        });
-        //window.application.renderScreen('lobby-screen');
-      }
-      // if (element['player-status'].status === 'game') {
-      //   window.application.renderScreen('turn');
-      // }
-    //});
-
-      
+  request(httpBack+'/player-list', {token: window.application.player.token}, function (element) {
+    if (element.status === 'ok') {
+      lobbyBlockText.value = '';
+      lobbyText.textContent = '';
+      element.list.forEach(function(item, i, element) {
+        console.log(item);
+        lobbyBlockText.value +=  `${item.login} (${item.loses} / ${item.wins})\n`;
+        if(item.you){
+          lobbyText.textContent = `${item.login}`;
+          lobbyTextInfo.textContent = `ПОБЕД ${item.loses} / ПОРАЖЕНИЙ ${item.wins}`;
+        }
+      });
+    }
+    lobbyBlockText.readOnly = true;
   });
 
 
@@ -178,6 +171,7 @@ function renderLobbyBlock(container) {
   lobbyBlockText.classList.add('lobby-list');
 
   container.appendChild(lobbyText);
+  container.appendChild(lobbyTextInfo);
   container.appendChild(lobbyBlockText);
 }
 
