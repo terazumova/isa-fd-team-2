@@ -187,10 +187,14 @@ a{
 }
 
 .lobby-list{
-  width: 80%;
   max-width: 222px;
-  height: 222px;
+  max-height: 222px;
+  min-width: 222px;
+  min-height: 222px;
   margin: 20px;
+  font-family: Chava; 
+  /* Chava, StarseedPro, consolas, monospace */
+  font-size: 20px;
 }
 
 .startGame-title,

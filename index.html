@@ -58,7 +58,7 @@
 
       function request(path, parameters, callback) {
         path += formatParameters(parameters);
-
+ 
         let xhr = new XMLHttpRequest();
         xhr.open('GET', path);
         xhr.addEventListener('readystatechange', event => {

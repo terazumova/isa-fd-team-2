@@ -146,13 +146,32 @@ function renderLoginScreen() {
 // Lobby block text
 function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
+  const lobbyTextInfo = document.createElement('p');
   const lobbyBlockText = document.createElement('textarea');
+  
+  request(httpBack+'/player-list', {token: window.application.player.token}, function (element) {
+    if (element.status === 'ok') {
+      lobbyBlockText.value = '';
+      lobbyText.textContent = '';
+      element.list.forEach(function(item, i, element) {
+        console.log(item);
+        lobbyBlockText.value +=  `${item.login} (${item.wins} / ${item.loses})\n`;
+        if(item.you){
+          lobbyText.textContent = `${item.login}`;
+          lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
+        }
+      });
+    }
+    lobbyBlockText.readOnly = true;
+  });
 
-  lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
+
+  //lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
   lobbyText.classList.add('win-title');
   lobbyBlockText.classList.add('lobby-list');
 
   container.appendChild(lobbyText);
+  container.appendChild(lobbyTextInfo);
   container.appendChild(lobbyBlockText);
 }
 
