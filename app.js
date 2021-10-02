@@ -522,7 +522,7 @@ function renderVsBlock(container) {
   const vsText2 = document.createElement('h1');
   container.appendChild(vsText1);
   container.appendChild(vsText2);
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     vsText1.textContent = `Твой противник:`;
     vsText2.textContent = data['game-status'].enemy.login;
   })
