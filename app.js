@@ -538,7 +538,7 @@ function renderVsScreen() {
 
   window.application.renderBlock('vs-block', vsScreen);
 
-  setTimeout(whoIsMyEnemy, 5000);
+  setTimeout(whoIsMyEnemy, 3000);
 }
 function renderWaitingGameBlock(container) {
   const waitingGameText = document.createElement('h1');
