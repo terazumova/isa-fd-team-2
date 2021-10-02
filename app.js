@@ -1,6 +1,5 @@
 let audioEl = document.querySelector('.audio');
 const app = document.querySelector('.app');
-const httpBack = 'https://skypro-rock-scissors-paper.herokuapp.com';
 
 function audioPlay() {
   if (audioEl.muted) {
@@ -12,35 +11,38 @@ function audioPlay() {
   }
 }
 
-window.application.screens['login-screen'] = renderLoginScreen;
-window.application.screens['startGame-screen'] = renderStartGameScreen;
-window.application.screens['lobby-screen'] = renderLobbyScreen;
-window.application.screens['win-screen'] = renderWinScreen;
-window.application.screens['fail-screen'] = renderFailScreen;
-window.application.screens['turn'] = renderTurnScreen;
-window.application.screens['double-turn'] = renderDoubleTurnScreen;
-window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen;
-window.application.screens['waiting-game-screen'] = renderWaitingGameScreen;
+
+// Screens
+window.application.screens['login-screen'] = renderLoginScreen;
+window.application.screens['startGame-screen'] = renderStartGameScreen;
+window.application.screens['lobby-screen'] = renderLobbyScreen;
+window.application.screens['win-screen'] = renderWinScreen;
+window.application.screens['fail-screen'] = renderFailScreen;
+window.application.screens['turn'] = renderTurnScreen;
+window.application.screens['double-turn'] = renderDoubleTurnScreen;
+window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen;
+window.application.screens['waiting-game-screen'] = renderWaitingGameScreen;
 window.application.screens['vs-screen'] = renderVsScreen;
 
-window.application.blocks['login-block'] = renderLoginBlock;
-window.application.blocks['startGame-block'] = renderStartGameBlock;
-window.application.blocks['win-block'] = renderWinBlock;
-window.application.blocks['fail-block'] = renderFailBlock;
-window.application.blocks['lobby-block'] = renderLobbyBlock;
-window.application.blocks['turn-block'] = renderTurnBlock;
-window.application.blocks['double-turn-block'] = renderDoubleTurnBlock;
-window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
+// Elements
+window.application.blocks['login-block'] = renderLoginBlock;
+window.application.blocks['startGame-block'] = renderStartGameBlock;
+window.application.blocks['win-block'] = renderWinBlock;
+window.application.blocks['fail-block'] = renderFailBlock;
+window.application.blocks['lobby-block'] = renderLobbyBlock;
+window.application.blocks['turn-block'] = renderTurnBlock;
+window.application.blocks['double-turn-block'] = renderDoubleTurnBlock;
+window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
 window.application.blocks['vs-block'] = renderVsBlock;
 
-window.application.blocks['login-button'] = renderLoginButton;
-window.application.blocks['startGame-button'] = renderStartGameButton;
-window.application.blocks['lobby-button'] = renderLobbyButton;
-window.application.blocks['play-button'] = renderPlayButton;
-window.application.blocks['back-button'] = renderBackButton;
-window.application.blocks['stone-button'] = renderStoneButton;
-window.application.blocks['scissors-button'] = renderScissorsButton;
-window.application.blocks['papper-button'] = renderPapperButton;
+window.application.blocks['login-button'] = renderLoginButton;
+window.application.blocks['startGame-button'] = renderStartGameButton;
+window.application.blocks['lobby-button'] = renderLobbyButton;
+window.application.blocks['play-button'] = renderPlayButton;
+window.application.blocks['back-button'] = renderBackButton;
+window.application.blocks['stone-button'] = renderStoneButton;
+window.application.blocks['scissors-button'] = renderScissorsButton;
+window.application.blocks['papper-button'] = renderPapperButton;
 
 window.application.renderScreen('startGame-screen');
 
@@ -60,7 +62,7 @@ function renderStartGameButton(container) {
   container.appendChild(startGameParagraph);
 
   startGameParagraph.addEventListener('click', event => {
-    request(httpBack + '/ping', '', function (data) {
+    request('/ping', '', function (data) {
       if (data.status === 'ok') {
         window.application.renderScreen('login-screen');
       } else {
@@ -85,7 +87,7 @@ function renderStartGameScreen() {
 
 function renderLoginBlock(container) {
   const loginText = document.createElement('h1');
-  loginText.textContent = 'Введите логин';
+  loginText.textContent = 'Введите ваш никнейм';
 
   loginText.classList.add('login-title');
 
@@ -109,10 +111,10 @@ function renderLoginButton(container) {
     if (loginInput.value !== '') {
       loginButton.disabled = true;
 
-      request(httpBack + '/login', { login: loginInput.value }, function (data) {
+      request('/login', { login: loginInput.value }, function (data) {
         if (data.status === 'ok') {
           window.application.player.token = data.token;
-          request(httpBack + '/player-status', { token: window.application.player.token }, function (element) {
+          request('/player-status', { token: window.application.player.token }, function (element) {
             if (element['player-status'].status === 'lobby') {
               window.application.renderScreen('lobby-screen');
             }
@@ -150,39 +152,46 @@ function renderLoginScreen() {
 function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
   const lobbyTextInfo = document.createElement('p');
+  lobbyTextInfo.classList.add('list-players')
   const lobbyBlockText = document.createElement('textarea');
 
-  request(httpBack + '/player-list', { token: window.application.player.token }, function (element) {
-    if (element.status === 'ok') {
-      lobbyBlockText.value = '';
-      lobbyText.textContent = '';
-      element.list.forEach(function (item, i, element) {
-        console.log(item);
-        lobbyBlockText.value += `${item.login} (W ${item.wins} / L ${item.loses})\n`;
-        if (item.you) {
-          lobbyText.textContent = `${item.login}`;
-          lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
-        }
-      });
-    }
-    lobbyBlockText.readOnly = true;
-  });
 
-  lobbyText.classList.add('win-title');
-  lobbyBlockText.classList.add('lobby-list');
+  function refreshLobby() {
+    request('/player-list', { token: window.application.player.token }, function (element) {
+      if (element.status === 'ok') {
+        lobbyBlockText.value = '';
+        lobbyText.textContent = '';
+        element.list.forEach(function (item, i, element) {
+          console.log(item);
+          lobbyBlockText.value += `${item.login} (W ${item.wins} / L ${item.loses})\n`;
+          if (item.you) {
+            lobbyText.textContent = `${item.login}`;
+            lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
+          }
+        });
+      }
+      lobbyBlockText.readOnly = true;
+    });
+    lobbyText.classList.add('win-title');
+    lobbyBlockText.classList.add('lobby-list');
 
-  container.appendChild(lobbyText);
-  container.appendChild(lobbyTextInfo);
-  container.appendChild(lobbyBlockText);
-}
+    container.appendChild(lobbyText);
+    container.appendChild(lobbyTextInfo);
+    container.appendChild(lobbyBlockText);
+  };
+  window.application.timers.push(setInterval(refreshLobby, 1000))
+};
 
 function renderLobbyScreen() {
   app.textContent = '';
   const lobbyScreen = document.createElement('div');
   lobbyScreen.classList.add('lobby-screen');
+  const lobbyArea = document.createElement('div');
 
   app.appendChild(lobbyScreen);
-  window.application.renderBlock('lobby-block', lobbyScreen);
+  lobbyScreen.appendChild(lobbyArea);
+
+  window.application.renderBlock('lobby-block', lobbyArea);
   window.application.renderBlock('play-button', lobbyScreen);
   window.application.renderBlock('back-button', lobbyScreen);
 
@@ -238,7 +247,7 @@ function renderPlayButton(container) {
   playButton.addEventListener('click', event => {
     disableAllButtons(container, true);
 
-    request(httpBack + '/start', { token: window.application.player.token }, function (data) {
+    request('/start', { token: window.application.player.token }, function (data) {
       if (data.status === 'ok') {
         window.application.player.gameId = data['player-status'].game.id;
         window.application.renderScreen('waiting-game-screen');
@@ -260,7 +269,7 @@ function renderBackButton(container) {
   backButton.textContent = 'ВЫЙТИ';
   backButton.classList.add('button');
   backButton.addEventListener('click', event => {
-    request(httpBack + '/logout', { token: window.application.player.token }, function (data) {
+    request('/logout', { token: window.application.player.token }, function (data) {
       disableAllButtons(container, true);
 
       window.application.renderScreen('login-screen');
@@ -313,7 +322,7 @@ function renderFailScreen() {
 }
 
 function turnCheck() {
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     if (data.status === 'error') {
       console.log(data.status + data.messague);
     } else {
@@ -337,15 +346,15 @@ function renderTurnBlock(container) {
 
   const enemyLogin = document.createElement('h2');
 
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    enemyLogin.textContent = 'Твой противник: '+ enemy ;})
+    enemyLogin.textContent = 'Твой противник: ' + enemy
+  });
 
-  
+
   enemyLogin.classList.add('turn-block');
   container.appendChild(enemyLogin);
-
 }
 
 function renderDoubleTurnBlock(container) {
@@ -356,12 +365,13 @@ function renderDoubleTurnBlock(container) {
   doubleTurnBottomText.classList.add('turn-block');
   container.appendChild(doubleTurnUpText);
   container.appendChild(doubleTurnBottomText);
-  
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+
+
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    doubleTurnUpText.textContent = 'Да вы c '+ enemy +' мыcлите одинаково!';})
- 
+    doubleTurnUpText.textContent = 'Да вы c ' + enemy + ' мыcлите одинаково!';
+  });
 }
 
 function renderStoneButton(container) {
@@ -374,7 +384,7 @@ function renderStoneButton(container) {
   stoneButton.addEventListener('click', e => {
     disableAllButtons(container, true);
 
-    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' }, function (data) {
+    request('/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' }, function (data) {
       if (data.status !== 'error') {
         let gameStatus = data['game-status'];
         if (gameStatus.status === 'waiting-for-enemy-move') {
@@ -405,7 +415,7 @@ function renderScissorsButton(container) {
   scissorsButton.addEventListener('click', e => {
     disableAllButtons(container, true);
 
-    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' }, function (data) {
+    request('/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' }, function (data) {
       if (data.status !== 'error') {
         let gameStatus = data['game-status'];
         if (gameStatus.status === 'waiting-for-enemy-move') {
@@ -435,7 +445,7 @@ function renderPapperButton(container) {
   papperButton.addEventListener('click', e => {
     disableAllButtons(container, true);
 
-    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' }, function (data) {
+    request('/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' }, function (data) {
       if (data.status !== 'error') {
         let gameStatus = data['game-status'];
         if (gameStatus.status === 'waiting-for-enemy-move') {
@@ -494,31 +504,33 @@ function renderWaitingTurnScreen() {
 }
 
 function waitingForStart() {
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     if (data.status === 'error') {
       console.log(data.status + ' ' + data.message);
     } else {
       let gameStatus = data['game-status'];
       if (gameStatus.status !== 'waiting-for-start') {
-        window.application.renderScreen('turn');
+        window.application.renderScreen('vs-screen');
       }
     }
   });
 }
+
 function renderVsBlock(container) {
   const vsText1 = document.createElement('h1');
+  vsText1.classList.add('enemy-name');
   const vsText2 = document.createElement('h1');
+  vsText2.classList.add('enemy-name')
+
   container.appendChild(vsText1);
   container.appendChild(vsText2);
-  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     vsText1.textContent = `Твой противник:`;
     vsText2.textContent = data['game-status'].enemy.login;
-  })
+  });
 }
 
-function whoIsMyEnemy() {
-  window.application.renderScreen('turn')
-}
+
 function renderVsScreen() {
   app.textContent = '';
   const vsScreen = document.createElement('div');
@@ -526,14 +538,17 @@ function renderVsScreen() {
 
   window.application.renderBlock('vs-block', vsScreen);
 
-  setTimeout(whoIsMyEnemy, 3000);
+  setTimeout(() => { window.application.renderScreen('turn') }, 3000);
 }
+
 function renderWaitingGameBlock(container) {
   const waitingGameText = document.createElement('h1');
   waitingGameText.textContent = 'Идет поиск противника..';
   waitingGameText.classList.add('waiting-game-block');
   container.appendChild(waitingGameText);
 }
+
+
 
 function renderWaitingGameScreen() {
   app.textContent = '';
@@ -546,6 +561,8 @@ function renderWaitingGameScreen() {
 
   window.application.renderBlock('waiting-game-block', waitingGameScreen);
   window.application.timers.push(setInterval(waitingForStart, 500));
+  setTimeout(() => { window.application.renderBlock('back-button', waitingGameScreen) }, 10000);
+
 }
 
 function disableAllButtons(container, isTrue) {

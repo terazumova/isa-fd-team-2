@@ -38,6 +38,10 @@ body {
   font-size: 16px;
 }
 
+p {
+  text-align: center;
+}
+
 a {
   text-decoration: none;
 }
@@ -144,15 +148,15 @@ a {
 }
 
 .scissors-button:hover {
-  background-image: url(./img/left-cut.png);
+  background-image: url(./img/left-cut.webp);
   background-size: cover;
 }
 .stone-button:hover {
-  background-image: url(./img/left-stone.png);
+  background-image: url(./img/left-stone.webp);
   background-size: cover;
 }
 .papper-button:hover {
-  background-image: url(./img/left-list.png);
+  background-image: url(./img/left-list.webp);
   background-size: cover;
 }
 
@@ -231,6 +235,7 @@ a {
 }
 
 .startGame-paragraph {
+  max-width: 200px;
   width: 50%;
   margin: 50px 0 50px 0;
 }
@@ -249,6 +254,14 @@ a {
   color: #000;
   font-size: 40px;
   text-align: center;
+}
+
+.enemy-name {
+  text-align: center;
+}
+
+.waiting-game-block {
+  margin-bottom: 200px;
 }
 
 .loader {

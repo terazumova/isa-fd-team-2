@@ -57,10 +57,11 @@
       };
 
       function request(path, parameters, callback) {
-        path += formatParameters(parameters);
- 
+        let fullUrl = getBackendUrl() + path;
+        fullUrl += formatParameters(parameters);
+
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', path);
+        xhr.open('GET', fullUrl);
         xhr.addEventListener('readystatechange', event => {
           if (event.target.readyState !== 4) {
             return;
@@ -78,6 +79,18 @@
         });
 
         xhr.send();
+      }
+
+      function getBackendUrl() {
+        const locationSearch = location.search;
+        const backendString = locationSearch.slice(1, locationSearch.length - 1);
+        backendArray = backendString.split('=');
+
+        if (backendArray[0] === 'backend' && backendArray[1] !== '') {
+          return decodeURIComponent(backendArray[1]);
+        }
+
+        return 'http://localhost:3000';
       }
 
       function formatParameters(parameters) {
