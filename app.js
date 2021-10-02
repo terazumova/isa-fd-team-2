@@ -92,7 +92,7 @@ function renderStartGameScreen() {
 
 function renderLoginBlock(container) {
   const loginText = document.createElement('h1');
-  loginText.textContent = 'Введите логин';
+  loginText.textContent = 'Введите ваш никнейм';
 
   loginText.classList.add('login-title');
 
@@ -158,41 +158,52 @@ function renderLoginScreen() {
 function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
   const lobbyTextInfo = document.createElement('p');
+  lobbyTextInfo.classList.add('list-players')
   const lobbyBlockText = document.createElement('textarea');
 
-  request('/player-list', { token: window.application.player.token }, function (element) {
-    if (element.status === 'ok') {
-      lobbyBlockText.value = '';
-      lobbyText.textContent = '';
-      element.list.forEach(function (item, i, element) {
-        console.log(item);
-        lobbyBlockText.value += `${item.login} (${item.wins} / ${item.loses})\n`;
-        if (item.you) {
-          lobbyText.textContent = `${item.login}`;
-          lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
-        }
-      });
-    }
-    lobbyBlockText.readOnly = true;
-  });
 
-  //lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
-  lobbyText.classList.add('win-title');
-  lobbyBlockText.classList.add('lobby-list');
+  function refreshLobby() {
+    request('/player-list', { token: window.application.player.token }, function (element) {
+      if (element.status === 'ok') {
+        lobbyBlockText.value = '';
+        lobbyText.textContent = '';
+        element.list.forEach(function (item, i, element) {
+          console.log(item);
+          lobbyBlockText.value += `${item.login} (${item.wins} / ${item.loses})\n`;
+          if (item.you) {
+            lobbyText.textContent = `${item.login}`;
+            lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
+          }
+        });
+      }
+      lobbyBlockText.readOnly = true;
+    });
+    lobbyText.classList.add('win-title');
+    lobbyBlockText.classList.add('lobby-list');
 
-  container.appendChild(lobbyText);
-  container.appendChild(lobbyTextInfo);
-  container.appendChild(lobbyBlockText);
-}
+    container.appendChild(lobbyText);
+    container.appendChild(lobbyTextInfo);
+    container.appendChild(lobbyBlockText);
+  };
+  window.application.timers.push(setInterval(refreshLobby, 1000))
+};
+
+
+
+//lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
+
 
 // Lobby Screen Fn ////////////////
 function renderLobbyScreen() {
   app.textContent = '';
   const lobbyScreen = document.createElement('div');
   lobbyScreen.classList.add('lobby-screen');
+  const lobbyArea = document.createElement('div');
 
   app.appendChild(lobbyScreen);
-  window.application.renderBlock('lobby-block', lobbyScreen);
+  lobbyScreen.appendChild(lobbyArea);
+
+  window.application.renderBlock('lobby-block', lobbyArea);
   window.application.renderBlock('play-button', lobbyScreen);
   window.application.renderBlock('back-button', lobbyScreen);
 
@@ -351,8 +362,9 @@ function renderTurnBlock(container) {
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    enemyLogin.textContent = 'Твой противник: ' + enemy;
+    enemyLogin.textContent = 'Твой противник: ' + enemy
   });
+
 
   enemyLogin.classList.add('turn-block');
   container.appendChild(enemyLogin);
@@ -366,6 +378,7 @@ function renderDoubleTurnBlock(container) {
   doubleTurnBottomText.classList.add('turn-block');
   container.appendChild(doubleTurnUpText);
   container.appendChild(doubleTurnBottomText);
+
 
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
@@ -510,25 +523,27 @@ function waitingForStart() {
     } else {
       let gameStatus = data['game-status'];
       if (gameStatus.status !== 'waiting-for-start') {
-        window.application.renderScreen('turn');
+        window.application.renderScreen('vs-screen');
       }
     }
   });
 }
+
 function renderVsBlock(container) {
   const vsText1 = document.createElement('h1');
+  vsText1.classList.add('enemy-name');
   const vsText2 = document.createElement('h1');
+  vsText2.classList.add('enemy-name')
+
   container.appendChild(vsText1);
   container.appendChild(vsText2);
-  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     vsText1.textContent = `Твой противник:`;
     vsText2.textContent = data['game-status'].enemy.login;
   });
 }
 
-function whoIsMyEnemy() {
-  window.application.renderScreen('turn');
-}
+
 function renderVsScreen() {
   app.textContent = '';
   const vsScreen = document.createElement('div');
@@ -536,14 +551,17 @@ function renderVsScreen() {
 
   window.application.renderBlock('vs-block', vsScreen);
 
-  setTimeout(whoIsMyEnemy, 3000);
+  setTimeout(() => { window.application.renderScreen('turn') }, 3000);
 }
+
 function renderWaitingGameBlock(container) {
   const waitingGameText = document.createElement('h1');
   waitingGameText.textContent = 'Идет поиск противника..';
   waitingGameText.classList.add('waiting-game-block');
   container.appendChild(waitingGameText);
 }
+
+
 
 function renderWaitingGameScreen() {
   app.textContent = '';
@@ -556,6 +574,8 @@ function renderWaitingGameScreen() {
 
   window.application.renderBlock('waiting-game-block', waitingGameScreen);
   window.application.timers.push(setInterval(waitingForStart, 500));
+  setTimeout(() => { window.application.renderBlock('back-button', waitingGameScreen) }, 10000);
+
 }
 
 function disableAllButtons(container, isTrue) {
