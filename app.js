@@ -44,7 +44,7 @@ window.application.blocks['stone-button'] = renderStoneButton;
 window.application.blocks['scissors-button'] = renderScissorsButton;
 window.application.blocks['papper-button'] = renderPapperButton;
 
-window.application.renderScreen('waiting-enemy-screen');
+window.application.renderScreen('startGame-screen');
 
 function renderStartGameBlock(container) {
   const startGameTitle = document.createElement('h1');
