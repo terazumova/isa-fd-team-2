@@ -118,7 +118,7 @@ function renderLoginButton(container) {
             if (element['player-status'].status === 'lobby') {
               window.application.renderScreen('lobby-screen');
             }
-            if (element['player-status'].status === 'game') {
+            if (element['player-status'].status === 'game' && element['player-status'].game.id !== '') {
               window.application.renderScreen('turn');
             }
           });
@@ -147,6 +147,7 @@ function renderLoginScreen() {
 
   window.application.renderBlock('login-block', authBlock);
   window.application.renderBlock('login-button', authBlock);
+  document.querySelector('.login-input').focus()
 }
 
 function renderLobbyBlock(container) {
@@ -244,6 +245,7 @@ function renderPlayButton(container) {
   playButton.textContent = 'ИГРАТЬ!';
   playButton.classList.add('play-button');
   playButton.classList.add('button');
+  playButton.classList.add('shake');
 
   playButton.addEventListener('click', event => {
     disableAllButtons(container, true);
@@ -348,6 +350,15 @@ function renderTurnBlock(container) {
   const enemyLogin = document.createElement('h2');
 
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+    if (data.status === 'error'){
+      console.log(data.status + data.message)
+      request('/logout', { token: window.application.player.token }, function (data) {
+        disableAllButtons(container, true);
+        
+        alert('Ошибка сервера')
+        window.application.renderScreen('login-screen');
+      });
+    }
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
 
@@ -406,12 +417,19 @@ function renderStoneButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        })
       }
     });
   });
 }
+
+
 
 function renderScissorsButton(container) {
   const scissorsButton = document.createElement('button');
@@ -437,12 +455,18 @@ function renderScissorsButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        })
       }
     });
   });
 }
+
 function renderPapperButton(container) {
   const papperButton = document.createElement('button');
   papperButton.textContent = 'БУМАГА';
@@ -467,8 +491,13 @@ function renderPapperButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        });
       }
     });
   });
