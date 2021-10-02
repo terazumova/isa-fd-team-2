@@ -266,6 +266,7 @@ a {
   right: 20px;
   bottom: 20px;
   z-index: 50;
+  
 }
 
 .info__icon {
@@ -325,10 +326,11 @@ a {
 
 .info__text {
   padding: 0px 10px 0px 0px;
-}
+  }
 
 .info__text p {
   margin: 0px 0px 10px 0px;
+  font-size: 15px;
 }
 
 .info__text p:last-child {
