@@ -38,10 +38,6 @@ body {
   font-size: 16px;
 }
 
-p {
-  text-align: center;
-}
-
 a {
   text-decoration: none;
 }
@@ -55,6 +51,11 @@ a {
   justify-content: center;
   font-family: StarseedPro, consolas, Arial, Helvetica, sans-serif;
   overflow: auto;
+}
+
+.waiting-game-screen,
+.waiting-enemy-block {
+  overflow: unset;
 }
 
 .button {
@@ -190,7 +191,7 @@ a {
 
   font-family: StarseedPro, consolas, Arial, Helvetica, sans-serif;
   font-size: 60px;
-  color: #fedd14;
+  color: #fff;
   text-shadow: 3px 3px #000;
 
   letter-spacing: 3px;
@@ -207,8 +208,10 @@ a {
   justify-content: center;
 }
 
-.win-title {
+.win-title,
+.list-players {
   text-align: center;
+  text-shadow: 2px 2px #000;
 }
 
 .lobby-list {
@@ -219,8 +222,9 @@ a {
   min-height: 222px;
   margin: 20px;
   font-family: Chava, consolas, Arial, Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   resize: none;
+  box-shadow: 3px 3px #000;
 }
 
 .startGame-title,
@@ -231,13 +235,20 @@ a {
   color: #fff;
   letter-spacing: 1.5px;
   font-size: 24px;
+  text-shadow: 2px 2px #000;
 }
 
 .waiting-game-block,
 .turn-block,
-.result-title {
+.result-title,
+.enemy-name {
   letter-spacing: 1.5px;
   text-align: center;
+  text-shadow: 2px 2px #000;
+}
+
+.enemy-name--red {
+  color: #ff033e;
 }
 
 .startGame-paragraph {
@@ -256,18 +267,15 @@ a {
   width: 80%;
   max-width: 222px;
   border: 2px solid #000;
+  box-shadow: 3px 3px #000;
   font-family: Chava, consolas, Arial, Helvetica, sans-serif;
   color: #000;
   font-size: 40px;
   text-align: center;
 }
 
-.enemy-name {
-  text-align: center;
-}
-
 .waiting-game-block {
-  margin-bottom: 200px;
+  margin-bottom: 180px;
 }
 
 .loader {
@@ -285,7 +293,6 @@ a {
   right: 20px;
   bottom: 20px;
   z-index: 50;
-  
 }
 
 .info__icon {
@@ -345,7 +352,7 @@ a {
 
 .info__text {
   padding: 0px 10px 0px 0px;
-  }
+}
 
 .info__text p {
   margin: 0px 0px 10px 0px;

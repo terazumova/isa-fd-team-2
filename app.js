@@ -32,6 +32,7 @@ window.application.blocks['lobby-block'] = renderLobbyBlock;
 window.application.blocks['turn-block'] = renderTurnBlock;
 window.application.blocks['double-turn-block'] = renderDoubleTurnBlock;
 window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
+window.application.blocks['waiting-turn-block'] = renderWaitingTurnBlock;
 window.application.blocks['vs-block'] = renderVsBlock;
 
 window.application.blocks['login-button'] = renderLoginButton;
@@ -43,7 +44,7 @@ window.application.blocks['stone-button'] = renderStoneButton;
 window.application.blocks['scissors-button'] = renderScissorsButton;
 window.application.blocks['papper-button'] = renderPapperButton;
 
-window.application.renderScreen('startGame-screen');
+window.application.renderScreen('waiting-enemy-screen');
 
 function renderStartGameBlock(container) {
   const startGameTitle = document.createElement('h1');
@@ -160,7 +161,6 @@ function renderLobbyBlock(container) {
         lobbyBlockText.value = '';
         lobbyText.textContent = '';
         element.list.forEach(function (item, i, element) {
-          console.log(item);
           lobbyBlockText.value += `${item.login} (W ${item.wins} / L ${item.loses})\n`;
           if (item.you) {
             lobbyText.textContent = `${item.login}`;
@@ -211,7 +211,7 @@ function renderWinBlock(container) {
 
 function renderFailBlock(container) {
   const loserText = document.createElement('h1');
-  loserText.textContent = 'LOSER';
+  loserText.textContent = 'WASTED';
   loserText.classList.add('loser-text');
 
   const failText = document.createElement('h1');
@@ -350,7 +350,12 @@ function renderTurnBlock(container) {
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    enemyLogin.textContent = 'ТВОЙ ПРОТИВНИК : ' + enemy;
+
+    const enemyName = document.createElement('span');
+    enemyName.classList.add('enemy-name--red');
+    enemyName.textContent = enemy;
+
+    enemyLogin.append('ТВОЙ ПРОТИВНИК : ', enemyName);
   });
 
   enemyLogin.classList.add('turn-block');
@@ -369,7 +374,11 @@ function renderDoubleTurnBlock(container) {
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    doubleTurnUpText.textContent = 'ДА ВЫ С ' + enemy + ' МЫСЛИТЕ ОДИНАКОВО!';
+    const enemyName = document.createElement('span');
+    enemyName.classList.add('enemy-name--red');
+    enemyName.textContent = enemy;
+
+    doubleTurnUpText.append('ДА ВЫ С ', enemyName, ' МЫСЛИТЕ ОДИНАКОВО!');
   });
 }
 
@@ -491,15 +500,29 @@ function renderDoubleTurnScreen() {
   window.application.renderBlock('papper-button', doubleTurnScreen);
 }
 
+function renderWaitingTurnBlock(container) {
+  const waitingGameText = document.createElement('h1');
+  waitingGameText.textContent = 'ОЖИДАНИЕ ПРОТИВНИКА..';
+  waitingGameText.classList.add('waiting-game-block');
+  container.appendChild(waitingGameText);
+}
+
 function renderWaitingTurnScreen() {
   app.textContent = '';
   const waitingTurnScreen = document.createElement('div');
   waitingTurnScreen.classList.add('waiting-enemy-block');
   waitingTurnScreen.classList.add('loader');
   waitingTurnScreen.classList.add('screen');
+
   app.appendChild(waitingTurnScreen);
 
+  window.application.renderBlock('waiting-turn-block', waitingTurnScreen);
+
   window.application.timers.push(setInterval(turnCheck, 500));
+
+  setTimeout(() => {
+    window.application.renderBlock('back-button', waitingTurnScreen);
+  }, 10000);
 }
 
 function waitingForStart() {
@@ -532,6 +555,8 @@ function renderVsBlock(container) {
 function renderVsScreen() {
   app.textContent = '';
   const vsScreen = document.createElement('div');
+  vsScreen.classList.add('screen');
+
   app.appendChild(vsScreen);
 
   window.application.renderBlock('vs-block', vsScreen);
