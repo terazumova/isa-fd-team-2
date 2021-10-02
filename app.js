@@ -1,9 +1,7 @@
-// затягиваем аудио
 let audioEl = document.querySelector('.audio');
 const app = document.querySelector('.app');
 const httpBack = 'https://skypro-rock-scissors-paper.herokuapp.com';
 
-//функция воспроизведения
 function audioPlay() {
   if (audioEl.muted) {
     audioEl.muted = false;
@@ -14,7 +12,6 @@ function audioPlay() {
   }
 }
 
-// Screens
 window.application.screens['login-screen'] = renderLoginScreen;
 window.application.screens['startGame-screen'] = renderStartGameScreen;
 window.application.screens['lobby-screen'] = renderLobbyScreen;
@@ -26,7 +23,6 @@ window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen;
 window.application.screens['waiting-game-screen'] = renderWaitingGameScreen;
 window.application.screens['vs-screen'] = renderVsScreen;
 
-// Elements
 window.application.blocks['login-block'] = renderLoginBlock;
 window.application.blocks['startGame-block'] = renderStartGameBlock;
 window.application.blocks['win-block'] = renderWinBlock;
@@ -46,10 +42,8 @@ window.application.blocks['stone-button'] = renderStoneButton;
 window.application.blocks['scissors-button'] = renderScissorsButton;
 window.application.blocks['papper-button'] = renderPapperButton;
 
-//Вызов
 window.application.renderScreen('startGame-screen');
 
-/* ********* БЛОК ЭКРАНА СТАРТА ********* */
 function renderStartGameBlock(container) {
   const startGameTitle = document.createElement('h1');
   startGameTitle.textContent = 'Камень-ножницы-бумага';
@@ -88,8 +82,6 @@ function renderStartGameScreen() {
   window.application.renderBlock('startGame-block', startGameScreen);
   window.application.renderBlock('startGame-button', startGameScreen);
 }
-
-/* ********* БЛОК ЭКРАНА РЕГИСТРАЦИИ ********* */
 
 function renderLoginBlock(container) {
   const loginText = document.createElement('h1');
@@ -155,7 +147,6 @@ function renderLoginScreen() {
   window.application.renderBlock('login-button', authBlock);
 }
 
-// Lobby block text
 function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
   const lobbyTextInfo = document.createElement('p');
@@ -167,7 +158,7 @@ function renderLobbyBlock(container) {
       lobbyText.textContent = '';
       element.list.forEach(function (item, i, element) {
         console.log(item);
-        lobbyBlockText.value += `${item.login} (${item.wins} / ${item.loses})\n`;
+        lobbyBlockText.value += `${item.login} (W ${item.wins} / L ${item.loses})\n`;
         if (item.you) {
           lobbyText.textContent = `${item.login}`;
           lobbyTextInfo.textContent = `ПОБЕД ${item.wins} / ПОРАЖЕНИЙ ${item.loses}`;
@@ -177,7 +168,6 @@ function renderLobbyBlock(container) {
     lobbyBlockText.readOnly = true;
   });
 
-  //lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
   lobbyText.classList.add('win-title');
   lobbyBlockText.classList.add('lobby-list');
 
@@ -186,7 +176,6 @@ function renderLobbyBlock(container) {
   container.appendChild(lobbyBlockText);
 }
 
-// Lobby Screen Fn ////////////////
 function renderLobbyScreen() {
   app.textContent = '';
   const lobbyScreen = document.createElement('div');
@@ -239,7 +228,6 @@ function renderLobbyButton(container) {
 
   container.appendChild(lobbyButton);
 }
-// Play button in lobby
 function renderPlayButton(container) {
   const playButton = document.createElement('button');
 

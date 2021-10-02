@@ -218,6 +218,7 @@ a {
   font-family: Chava;
   /* Chava, StarseedPro, consolas, monospace */
   font-size: 20px;
+  resize: none;
 }
 
 .startGame-title,
