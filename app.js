@@ -355,7 +355,7 @@ function renderTurnBlock(container) {
       request('/logout', { token: window.application.player.token }, function (data) {
         disableAllButtons(container, true);
         
-        alert('Ты был отключен :(')
+        alert('Ошибка сервера')
         window.application.renderScreen('login-screen');
       });
     }
