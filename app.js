@@ -14,36 +14,36 @@ function audioPlay() {
 }
 
 // Screens
-window.application.screens['login-screen'] = renderLoginScreen;
-window.application.screens['startGame-screen'] = renderStartGameScreen;
-window.application.screens['lobby-screen'] = renderLobbyScreen;
-window.application.screens['win-screen'] = renderWinScreen;
-window.application.screens['fail-screen'] = renderFailScreen;
-window.application.screens['turn'] = renderTurnScreen;
-window.application.screens['double-turn'] = renderDoubleTurnScreen;
-window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen;
-window.application.screens['waiting-game-screen'] = renderWaitingGameScreen;
+window.application.screens['login-screen'] = renderLoginScreen;
+window.application.screens['startGame-screen'] = renderStartGameScreen;
+window.application.screens['lobby-screen'] = renderLobbyScreen;
+window.application.screens['win-screen'] = renderWinScreen;
+window.application.screens['fail-screen'] = renderFailScreen;
+window.application.screens['turn'] = renderTurnScreen;
+window.application.screens['double-turn'] = renderDoubleTurnScreen;
+window.application.screens['waiting-enemy-screen'] = renderWaitingTurnScreen;
+window.application.screens['waiting-game-screen'] = renderWaitingGameScreen;
 window.application.screens['vs-screen'] = renderVsScreen;
 
 // Elements
-window.application.blocks['login-block'] = renderLoginBlock;
-window.application.blocks['startGame-block'] = renderStartGameBlock;
-window.application.blocks['win-block'] = renderWinBlock;
-window.application.blocks['fail-block'] = renderFailBlock;
-window.application.blocks['lobby-block'] = renderLobbyBlock;
-window.application.blocks['turn-block'] = renderTurnBlock;
-window.application.blocks['double-turn-block'] = renderDoubleTurnBlock;
-window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
+window.application.blocks['login-block'] = renderLoginBlock;
+window.application.blocks['startGame-block'] = renderStartGameBlock;
+window.application.blocks['win-block'] = renderWinBlock;
+window.application.blocks['fail-block'] = renderFailBlock;
+window.application.blocks['lobby-block'] = renderLobbyBlock;
+window.application.blocks['turn-block'] = renderTurnBlock;
+window.application.blocks['double-turn-block'] = renderDoubleTurnBlock;
+window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
 window.application.blocks['vs-block'] = renderVsBlock;
 
-window.application.blocks['login-button'] = renderLoginButton;
-window.application.blocks['startGame-button'] = renderStartGameButton;
-window.application.blocks['lobby-button'] = renderLobbyButton;
-window.application.blocks['play-button'] = renderPlayButton;
-window.application.blocks['back-button'] = renderBackButton;
-window.application.blocks['stone-button'] = renderStoneButton;
-window.application.blocks['scissors-button'] = renderScissorsButton;
-window.application.blocks['papper-button'] = renderPapperButton;
+window.application.blocks['login-button'] = renderLoginButton;
+window.application.blocks['startGame-button'] = renderStartGameButton;
+window.application.blocks['lobby-button'] = renderLobbyButton;
+window.application.blocks['play-button'] = renderPlayButton;
+window.application.blocks['back-button'] = renderBackButton;
+window.application.blocks['stone-button'] = renderStoneButton;
+window.application.blocks['scissors-button'] = renderScissorsButton;
+window.application.blocks['papper-button'] = renderPapperButton;
 
 //Вызов
 window.application.renderScreen('startGame-screen');
@@ -271,13 +271,9 @@ function renderBackButton(container) {
   backButton.textContent = 'ВЫЙТИ';
   backButton.classList.add('button');
   backButton.addEventListener('click', event => {
-<<<<<<< HEAD
-    request(httpBack + '/logout', { token: window.application.player.token }, function (data) {
+    request('/logout', { token: window.application.player.token }, function (data) {
       disableAllButtons(container, true);
 
-=======
-    request('/logout', { token: window.application.player.token }, function (data) {
->>>>>>> c97fcd0 (added getbackend url function)
       window.application.renderScreen('login-screen');
     });
   });
@@ -352,15 +348,14 @@ function renderTurnBlock(container) {
 
   const enemyLogin = document.createElement('h2');
 
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    enemyLogin.textContent = 'Твой противник: '+ enemy ;})
+    enemyLogin.textContent = 'Твой противник: ' + enemy;
+  });
 
-  
   enemyLogin.classList.add('turn-block');
   container.appendChild(enemyLogin);
-
 }
 
 function renderDoubleTurnBlock(container) {
@@ -371,12 +366,12 @@ function renderDoubleTurnBlock(container) {
   doubleTurnBottomText.classList.add('turn-block');
   container.appendChild(doubleTurnUpText);
   container.appendChild(doubleTurnBottomText);
-  
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    doubleTurnUpText.textContent = 'Да вы c '+ enemy +' мыcлите одинаково!';})
- 
+    doubleTurnUpText.textContent = 'Да вы c ' + enemy + ' мыcлите одинаково!';
+  });
 }
 
 function renderStoneButton(container) {
@@ -528,11 +523,11 @@ function renderVsBlock(container) {
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     vsText1.textContent = `Твой противник:`;
     vsText2.textContent = data['game-status'].enemy.login;
-  })
+  });
 }
 
 function whoIsMyEnemy() {
-  window.application.renderScreen('turn')
+  window.application.renderScreen('turn');
 }
 function renderVsScreen() {
   app.textContent = '';
