@@ -1,7 +1,6 @@
 // затягиваем аудио
 let audioEl = document.querySelector('.audio');
 const app = document.querySelector('.app');
-const httpBack = 'https://skypro-rock-scissors-paper.herokuapp.com';
 
 //функция воспроизведения
 function audioPlay() {
@@ -66,7 +65,7 @@ function renderStartGameButton(container) {
   container.appendChild(startGameParagraph);
 
   startGameParagraph.addEventListener('click', event => {
-    request(httpBack + '/ping', '', function (data) {
+    request('/ping', '', function (data) {
       if (data.status === 'ok') {
         window.application.renderScreen('login-screen');
       } else {
@@ -117,10 +116,10 @@ function renderLoginButton(container) {
     if (loginInput.value !== '') {
       loginButton.disabled = true;
 
-      request(httpBack + '/login', { login: loginInput.value }, function (data) {
+      request('/login', { login: loginInput.value }, function (data) {
         if (data.status === 'ok') {
           window.application.player.token = data.token;
-          request(httpBack + '/player-status', { token: window.application.player.token }, function (element) {
+          request('/player-status', { token: window.application.player.token }, function (element) {
             if (element['player-status'].status === 'lobby') {
               window.application.renderScreen('lobby-screen');
             }
@@ -161,7 +160,7 @@ function renderLobbyBlock(container) {
   const lobbyTextInfo = document.createElement('p');
   const lobbyBlockText = document.createElement('textarea');
 
-  request(httpBack + '/player-list', { token: window.application.player.token }, function (element) {
+  request('/player-list', { token: window.application.player.token }, function (element) {
     if (element.status === 'ok') {
       lobbyBlockText.value = '';
       lobbyText.textContent = '';
@@ -250,7 +249,7 @@ function renderPlayButton(container) {
   playButton.addEventListener('click', event => {
     disableAllButtons(container, true);
 
-    request(httpBack + '/start', { token: window.application.player.token }, function (data) {
+    request('/start', { token: window.application.player.token }, function (data) {
       if (data.status === 'ok') {
         window.application.player.gameId = data['player-status'].game.id;
         window.application.renderScreen('waiting-game-screen');
@@ -272,9 +271,13 @@ function renderBackButton(container) {
   backButton.textContent = 'ВЫЙТИ';
   backButton.classList.add('button');
   backButton.addEventListener('click', event => {
+<<<<<<< HEAD
     request(httpBack + '/logout', { token: window.application.player.token }, function (data) {
       disableAllButtons(container, true);
 
+=======
+    request('/logout', { token: window.application.player.token }, function (data) {
+>>>>>>> c97fcd0 (added getbackend url function)
       window.application.renderScreen('login-screen');
     });
   });
@@ -325,7 +328,7 @@ function renderFailScreen() {
 }
 
 function turnCheck() {
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     if (data.status === 'error') {
       console.log(data.status + data.messague);
     } else {
@@ -386,7 +389,7 @@ function renderStoneButton(container) {
   stoneButton.addEventListener('click', e => {
     disableAllButtons(container, true);
 
-    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' }, function (data) {
+    request('/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'rock' }, function (data) {
       if (data.status !== 'error') {
         let gameStatus = data['game-status'];
         if (gameStatus.status === 'waiting-for-enemy-move') {
@@ -417,7 +420,7 @@ function renderScissorsButton(container) {
   scissorsButton.addEventListener('click', e => {
     disableAllButtons(container, true);
 
-    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' }, function (data) {
+    request('/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'scissors' }, function (data) {
       if (data.status !== 'error') {
         let gameStatus = data['game-status'];
         if (gameStatus.status === 'waiting-for-enemy-move') {
@@ -447,7 +450,7 @@ function renderPapperButton(container) {
   papperButton.addEventListener('click', e => {
     disableAllButtons(container, true);
 
-    request(httpBack + '/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' }, function (data) {
+    request('/play', { token: window.application.player.token, id: window.application.player.gameId, move: 'paper' }, function (data) {
       if (data.status !== 'error') {
         let gameStatus = data['game-status'];
         if (gameStatus.status === 'waiting-for-enemy-move') {
@@ -506,7 +509,7 @@ function renderWaitingTurnScreen() {
 }
 
 function waitingForStart() {
-  request(httpBack + '/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+  request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     if (data.status === 'error') {
       console.log(data.status + ' ' + data.message);
     } else {
