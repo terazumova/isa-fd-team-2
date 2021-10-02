@@ -11,7 +11,6 @@ function audioPlay() {
   }
 }
 
-
 // Screens
 window.application.screens['login-screen'] = renderLoginScreen;
 window.application.screens['startGame-screen'] = renderStartGameScreen;
@@ -33,6 +32,7 @@ window.application.blocks['lobby-block'] = renderLobbyBlock;
 window.application.blocks['turn-block'] = renderTurnBlock;
 window.application.blocks['double-turn-block'] = renderDoubleTurnBlock;
 window.application.blocks['waiting-game-block'] = renderWaitingGameBlock;
+window.application.blocks['waiting-turn-block'] = renderWaitingTurnBlock;
 window.application.blocks['vs-block'] = renderVsBlock;
 
 window.application.blocks['login-button'] = renderLoginButton;
@@ -48,7 +48,7 @@ window.application.renderScreen('startGame-screen');
 
 function renderStartGameBlock(container) {
   const startGameTitle = document.createElement('h1');
-  startGameTitle.textContent = 'Камень-ножницы-бумага';
+  startGameTitle.textContent = 'КАМЕНЬ-НОЖНИЦЫ-БУМАГА';
   startGameTitle.classList.add('startGame-title');
 
   container.appendChild(startGameTitle);
@@ -87,7 +87,7 @@ function renderStartGameScreen() {
 
 function renderLoginBlock(container) {
   const loginText = document.createElement('h1');
-  loginText.textContent = 'Введите ваш никнейм';
+  loginText.textContent = 'ВВЕДИТЕ ВАШ НИКНЕЙМ';
 
   loginText.classList.add('login-title');
 
@@ -118,7 +118,7 @@ function renderLoginButton(container) {
             if (element['player-status'].status === 'lobby') {
               window.application.renderScreen('lobby-screen');
             }
-            if (element['player-status'].status === 'game') {
+            if (element['player-status'].status === 'game' && element['player-status'].game.id !== '') {
               window.application.renderScreen('turn');
             }
           });
@@ -147,14 +147,14 @@ function renderLoginScreen() {
 
   window.application.renderBlock('login-block', authBlock);
   window.application.renderBlock('login-button', authBlock);
+  document.querySelector('.login-input').focus()
 }
 
 function renderLobbyBlock(container) {
   const lobbyText = document.createElement('h1');
   const lobbyTextInfo = document.createElement('p');
-  lobbyTextInfo.classList.add('list-players')
+  lobbyTextInfo.classList.add('list-players');
   const lobbyBlockText = document.createElement('textarea');
-
 
   function refreshLobby() {
     request('/player-list', { token: window.application.player.token }, function (element) {
@@ -162,7 +162,6 @@ function renderLobbyBlock(container) {
         lobbyBlockText.value = '';
         lobbyText.textContent = '';
         element.list.forEach(function (item, i, element) {
-          console.log(item);
           lobbyBlockText.value += `${item.login} (W ${item.wins} / L ${item.loses})\n`;
           if (item.you) {
             lobbyText.textContent = `${item.login}`;
@@ -178,10 +177,13 @@ function renderLobbyBlock(container) {
     container.appendChild(lobbyText);
     container.appendChild(lobbyTextInfo);
     container.appendChild(lobbyBlockText);
-  };
-  window.application.timers.push(setInterval(refreshLobby, 1000))
-};
+  }
+  window.application.timers.push(setInterval(refreshLobby, 1000));
+}
 
+//lobbyText.textContent = 'GAMER: Nick, Wins, Fails';
+
+// Lobby Screen Fn ////////////////
 function renderLobbyScreen() {
   app.textContent = '';
   const lobbyScreen = document.createElement('div');
@@ -196,13 +198,13 @@ function renderLobbyScreen() {
   window.application.renderBlock('back-button', lobbyScreen);
 
   const replayButton = document.querySelector('.play-button');
-  replayButton.textContent = 'Играть';
+  replayButton.textContent = 'ИГРАТЬ';
 }
 
 function renderWinBlock(container) {
   const winText = document.createElement('h1');
 
-  winText.textContent = 'Ты победил!';
+  winText.textContent = 'ТЫ ПОБЕДИЛ!';
   winText.classList.add('result-title');
 
   container.appendChild(winText);
@@ -210,11 +212,11 @@ function renderWinBlock(container) {
 
 function renderFailBlock(container) {
   const loserText = document.createElement('h1');
-  loserText.textContent = 'LOSER';
+  loserText.textContent = 'WASTED';
   loserText.classList.add('loser-text');
 
   const failText = document.createElement('h1');
-  failText.textContent = 'Ты проиграл!';
+  failText.textContent = 'ТЫ ПРОИГРАЛ!';
 
   failText.classList.add('result-title');
 
@@ -224,7 +226,7 @@ function renderFailBlock(container) {
 
 function renderLobbyButton(container) {
   const lobbyButton = document.createElement('button');
-  lobbyButton.textContent = 'Перейти в лобби';
+  lobbyButton.textContent = 'ПЕРЕЙТИ В ЛОББИ';
 
   lobbyButton.classList.add('lobby-button');
   lobbyButton.classList.add('button');
@@ -240,9 +242,10 @@ function renderLobbyButton(container) {
 function renderPlayButton(container) {
   const playButton = document.createElement('button');
 
-  playButton.textContent = 'Играть!';
+  playButton.textContent = 'ИГРАТЬ!';
   playButton.classList.add('play-button');
   playButton.classList.add('button');
+  playButton.classList.add('shake');
 
   playButton.addEventListener('click', event => {
     disableAllButtons(container, true);
@@ -301,7 +304,7 @@ function renderWinScreen() {
   window.application.renderBlock('play-button', winScreen);
 
   const replayButton = document.querySelector('.play-button');
-  replayButton.textContent = 'Играть еще!';
+  replayButton.textContent = 'ИГРАТЬ ЕЩЕ!';
 }
 
 function renderFailScreen() {
@@ -318,7 +321,7 @@ function renderFailScreen() {
   window.application.renderBlock('play-button', failScreen);
 
   const replayButton = document.querySelector('.play-button');
-  replayButton.textContent = 'Играть еще!';
+  replayButton.textContent = 'ИГРАТЬ ЕЩЕ!';
 }
 
 function turnCheck() {
@@ -340,18 +343,31 @@ function turnCheck() {
 
 function renderTurnBlock(container) {
   const turnText = document.createElement('h1');
-  turnText.textContent = 'Твой Ход';
+  turnText.textContent = 'ТВОЙ ХОД';
   turnText.classList.add('turn-block');
   container.appendChild(turnText);
 
   const enemyLogin = document.createElement('h2');
 
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
+    if (data.status === 'error'){
+      console.log(data.status + data.message)
+      request('/logout', { token: window.application.player.token }, function (data) {
+        disableAllButtons(container, true);
+        
+        alert('Ты был отключен :(')
+        window.application.renderScreen('login-screen');
+      });
+    }
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    enemyLogin.textContent = 'Твой противник: ' + enemy
-  });
 
+    const enemyName = document.createElement('span');
+    enemyName.classList.add('enemy-name--red');
+    enemyName.textContent = enemy;
+
+    enemyLogin.append('ТВОЙ ПРОТИВНИК : ', enemyName);
+  });
 
   enemyLogin.classList.add('turn-block');
   container.appendChild(enemyLogin);
@@ -360,23 +376,26 @@ function renderTurnBlock(container) {
 function renderDoubleTurnBlock(container) {
   const doubleTurnUpText = document.createElement('h1');
   const doubleTurnBottomText = document.createElement('h2');
-  doubleTurnBottomText.textContent = 'Давай еще разок';
+  doubleTurnBottomText.textContent = 'ДАВАЙ ЕЩЕ РАЗОК';
   doubleTurnUpText.classList.add('turn-block');
   doubleTurnBottomText.classList.add('turn-block');
   container.appendChild(doubleTurnUpText);
   container.appendChild(doubleTurnBottomText);
 
-
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
     let gameStatus = data['game-status'];
     let enemy = gameStatus.enemy.login;
-    doubleTurnUpText.textContent = 'Да вы c ' + enemy + ' мыcлите одинаково!';
+    const enemyName = document.createElement('span');
+    enemyName.classList.add('enemy-name--red');
+    enemyName.textContent = enemy;
+
+    doubleTurnUpText.append('ДА ВЫ С ', enemyName, ' МЫСЛИТЕ ОДИНАКОВО!');
   });
 }
 
 function renderStoneButton(container) {
   const stoneButton = document.createElement('button');
-  stoneButton.textContent = 'Камень';
+  stoneButton.textContent = 'КАМЕНЬ';
   stoneButton.classList.add('stone-button');
   stoneButton.classList.add('button');
   container.appendChild(stoneButton);
@@ -398,16 +417,23 @@ function renderStoneButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        })
       }
     });
   });
 }
 
+
+
 function renderScissorsButton(container) {
   const scissorsButton = document.createElement('button');
-  scissorsButton.textContent = 'Ножницы';
+  scissorsButton.textContent = 'НОЖНИЦЫ';
   scissorsButton.classList.add('scissors-button');
   scissorsButton.classList.add('button');
   container.appendChild(scissorsButton);
@@ -429,15 +455,21 @@ function renderScissorsButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        })
       }
     });
   });
 }
+
 function renderPapperButton(container) {
   const papperButton = document.createElement('button');
-  papperButton.textContent = 'Бумага';
+  papperButton.textContent = 'БУМАГА';
   papperButton.classList.add('papper-button');
   papperButton.classList.add('button');
   container.appendChild(papperButton);
@@ -459,8 +491,13 @@ function renderPapperButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        });
       }
     });
   });
@@ -492,15 +529,29 @@ function renderDoubleTurnScreen() {
   window.application.renderBlock('papper-button', doubleTurnScreen);
 }
 
+function renderWaitingTurnBlock(container) {
+  const waitingGameText = document.createElement('h1');
+  waitingGameText.textContent = 'ОЖИДАНИЕ ПРОТИВНИКА..';
+  waitingGameText.classList.add('waiting-game-block');
+  container.appendChild(waitingGameText);
+}
+
 function renderWaitingTurnScreen() {
   app.textContent = '';
   const waitingTurnScreen = document.createElement('div');
   waitingTurnScreen.classList.add('waiting-enemy-block');
   waitingTurnScreen.classList.add('loader');
   waitingTurnScreen.classList.add('screen');
+
   app.appendChild(waitingTurnScreen);
 
+  window.application.renderBlock('waiting-turn-block', waitingTurnScreen);
+
   window.application.timers.push(setInterval(turnCheck, 500));
+
+  setTimeout(() => {
+    window.application.renderBlock('back-button', waitingTurnScreen);
+  }, 10000);
 }
 
 function waitingForStart() {
@@ -520,35 +571,36 @@ function renderVsBlock(container) {
   const vsText1 = document.createElement('h1');
   vsText1.classList.add('enemy-name');
   const vsText2 = document.createElement('h1');
-  vsText2.classList.add('enemy-name')
+  vsText2.classList.add('enemy-name');
 
   container.appendChild(vsText1);
   container.appendChild(vsText2);
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
-    vsText1.textContent = `Твой противник:`;
+    vsText1.textContent = `ТВОЙ ПРОТИВНИК :`;
     vsText2.textContent = data['game-status'].enemy.login;
   });
 }
 
-
 function renderVsScreen() {
   app.textContent = '';
   const vsScreen = document.createElement('div');
+  vsScreen.classList.add('screen');
+
   app.appendChild(vsScreen);
 
   window.application.renderBlock('vs-block', vsScreen);
 
-  setTimeout(() => { window.application.renderScreen('turn') }, 3000);
+  setTimeout(() => {
+    window.application.renderScreen('turn');
+  }, 3000);
 }
 
 function renderWaitingGameBlock(container) {
   const waitingGameText = document.createElement('h1');
-  waitingGameText.textContent = 'Идет поиск противника..';
+  waitingGameText.textContent = 'ИДЕТ ПОИСК ПРОТИВНИКА..';
   waitingGameText.classList.add('waiting-game-block');
   container.appendChild(waitingGameText);
 }
-
-
 
 function renderWaitingGameScreen() {
   app.textContent = '';
@@ -561,8 +613,9 @@ function renderWaitingGameScreen() {
 
   window.application.renderBlock('waiting-game-block', waitingGameScreen);
   window.application.timers.push(setInterval(waitingForStart, 500));
-  setTimeout(() => { window.application.renderBlock('back-button', waitingGameScreen) }, 10000);
-
+  setTimeout(() => {
+    window.application.renderBlock('back-button', waitingGameScreen);
+  }, 10000);
 }
 
 function disableAllButtons(container, isTrue) {

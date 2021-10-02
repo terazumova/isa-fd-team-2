@@ -10,7 +10,7 @@
   <body>
     <div class="app"></div>
     <div class="info">
-      <button class="info__icon mute-button" onclick="audioPlay()">></button>
+      <button class="info__icon mute-button" onclick="audioPlay()">&#128264;</button>
       <a href="#info" title="Правила игры" class="info__icon">i</a>
       <div id="info" class="info__body">
         <a href="#" class="info__close">X</a>
@@ -63,7 +63,7 @@
         let xhr = new XMLHttpRequest();
         xhr.open('GET', fullUrl);
         xhr.addEventListener('readystatechange', event => {
-          if (event.target.readyState !== 4) {
+          if (event.target.readyState !== 4 || event.target.status !== 200) {
             return;
           }
 
@@ -94,6 +94,9 @@
       }
 
       function formatParameters(parameters) {
+        if (!parameters || Object.keys(parameters).length === 0) {
+        return '';
+        }
         return (
           '?' +
           Object.keys(parameters)
