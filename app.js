@@ -119,8 +119,27 @@ function renderLoginButton(container) {
             if (element['player-status'].status === 'lobby') {
               window.application.renderScreen('lobby-screen');
             }
-            if (element['player-status'].status === 'game') {
-              window.application.renderScreen('turn');
+            if (element['player-status'].status === 'game' && element['player-status'].game.id !== '') {
+              window.application.player.gameId = element['player-status'].game.id;
+              request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (element) {
+                if (element['game-status'].status === 'waiting-for-start') {
+                  window.application.renderScreen('waiting-game-screen');
+                }
+                if (element['game-status'].status === 'waiting-your-move') {
+                  window.application.renderScreen('turn');
+                }
+                if (element['game-status'].status === 'waiting-for-enemy-move') {
+                  window.application.renderScreen('waiting-enemy-screen');
+                }
+                if (element['game-status'].status === 'lose') {
+                  window.application.renderScreen('fail-screen');
+                }
+                if (element['game-status'].status === 'win') {
+                  window.application.renderScreen('win-screen');
+                }
+              });
+            } else {
+              window.application.renderScreen('lobby-screen');
             }
           });
         }
@@ -148,6 +167,7 @@ function renderLoginScreen() {
 
   window.application.renderBlock('login-block', authBlock);
   window.application.renderBlock('login-button', authBlock);
+  document.querySelector('.login-input').focus()
 }
 
 function renderLobbyBlock(container) {
@@ -239,12 +259,14 @@ function renderLobbyButton(container) {
 
   container.appendChild(lobbyButton);
 }
+
 function renderPlayButton(container) {
   const playButton = document.createElement('button');
 
   playButton.textContent = 'ИГРАТЬ!';
   playButton.classList.add('play-button');
   playButton.classList.add('button');
+  playButton.classList.add('shake');
 
   playButton.addEventListener('click', event => {
     disableAllButtons(container, true);
@@ -347,18 +369,27 @@ function renderTurnBlock(container) {
   container.appendChild(turnText);
 
   const enemyLogin = document.createElement('h2');
-
+  let reserve = JSON.parse(localStorage.getItem('myStorage'));
+  if (window.application.player.gameId === '') {
+    window.application.player.token = reserve.player.token;
+    window.application.player.gameId = reserve.player.gameId;
+  }
   request('/game-status', { token: window.application.player.token, id: window.application.player.gameId }, function (data) {
-    let gameStatus = data['game-status'];
-    let enemy = gameStatus.enemy.login;
+    if (data.status !== 'error') {
+      let gameStatus = data['game-status'];
+      let enemy = gameStatus.enemy.login;
 
-    const enemyName = document.createElement('span');
-    enemyName.classList.add('enemy-name--red');
-    enemyName.textContent = enemy;
+      const enemyName = document.createElement('span');
+      enemyName.classList.add('enemy-name--red');
+      enemyName.textContent = enemy;
 
-    enemyLogin.append('ТВОЙ ПРОТИВНИК : ', enemyName);
+      enemyLogin.append('ТВОЙ ПРОТИВНИК : ', enemyName);
+    }
+    else {
+      alert('Ошибка сервера')
+      window.application.renderScreen('login-screen');
+    }
   });
-
   enemyLogin.classList.add('turn-block');
   container.appendChild(enemyLogin);
 }
@@ -407,12 +438,19 @@ function renderStoneButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        })
       }
     });
   });
 }
+
+
 
 function renderScissorsButton(container) {
   const scissorsButton = document.createElement('button');
@@ -438,12 +476,18 @@ function renderScissorsButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        })
       }
     });
   });
 }
+
 function renderPapperButton(container) {
   const papperButton = document.createElement('button');
   papperButton.textContent = 'БУМАГА';
@@ -468,8 +512,13 @@ function renderPapperButton(container) {
         }
       } else {
         console.log(data.status + ' ' + data.message);
-
-        disableAllButtons(container, false);
+        request('/logout', { token: window.application.player.token }, function (data) {
+          disableAllButtons(container, true);
+          alert('Ошибка сервера')
+          window.application.player.token = ''
+          window.application.player.gameId = ''
+          window.application.renderScreen('login-screen');
+        });
       }
     });
   });
@@ -572,6 +621,7 @@ function renderWaitingGameBlock(container) {
   waitingGameText.textContent = 'ИДЕТ ПОИСК ПРОТИВНИКА..';
   waitingGameText.classList.add('waiting-game-block');
   container.appendChild(waitingGameText);
+  localStorage.setItem('myStorage', JSON.stringify(window.application))
 }
 
 function renderWaitingGameScreen() {
