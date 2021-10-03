@@ -97,6 +97,7 @@ function renderLoginBlock(container) {
 function renderLoginButton(container) {
   const loginInput = document.createElement('input');
   loginInput.classList.add('login-input');
+  loginInput.autofocus = true;
   loginInput.addEventListener('input', e => {
     e.target.value = e.target.value.substr(0, 8);
   });
